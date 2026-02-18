@@ -176,7 +176,18 @@
       { font-weight: 600; } .passport-qr { width: 120px; height: 120px; background:
       white; border-radius: 10px; margin-top: 30px; display: flex; justify-content:
       center; align-items: center; font-size: 12px; color: #1CA7A6; font-weight:
-      600; }  /* Login Modal */ .login-modal { position:
+      600; } /* NGO Cards */ .ngo-cards { display: grid; grid-template-columns:
+      repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px; } .ngo-card
+      { background: white; border-radius: 20px; padding: 30px; text-align: center;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08); transition: all 0.3s ease;
+      border: 2px solid transparent; } .ngo-card:hover { border-color: #1CA7A6;
+      transform: translateY(-10px); } .ngo-icon { font-size: 60px; margin-bottom:
+      20px; } .ngo-title { font-size: 20px; font-weight: 700; color: #1CA7A6;
+      margin-bottom: 15px; } .ngo-desc { color: #666; font-size: 14px; margin-bottom:
+      20px; line-height: 1.6; } .ngo-button { background: linear-gradient(135deg,
+      #1CA7A6, #A7D8F5); color: white; padding: 12px 25px; border: none; border-radius:
+      20px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; } .ngo-button:hover
+      { transform: scale(1.05); } /* Login Modal */ .login-modal { position:
       fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0,
       0.7); display: flex; justify-content: center; align-items: center; z-index:
       2000; opacity: 0; pointer-events: none; transition: all 0.3s ease; } .login-modal.active
@@ -239,7 +250,20 @@
       white; color: #1CA7A6; border: 2px solid #1CA7A6; padding: 12px 25px; border-radius:
       20px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all
       0.3s ease; } .role-switch-banner button:hover { background: #FFF8F0; transform:
-      translateY(-2px); }  /* Donation Payment Modal */ .payment-modal
+      translateY(-2px); } /* NGO Donation List */ .ngo-donation-grid { display:
+      grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:
+      25px; margin-top: 40px; } .ngo-donation-card { background: white; border-radius:
+      16px; padding: 25px; box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08); transition:
+      all 0.3s ease; border: 2px solid transparent; cursor: pointer; } .ngo-donation-card:hover
+      { border-color: #1CA7A6; transform: translateY(-8px); box-shadow: 0 20px
+      50px rgba(28, 167, 166, 0.2); } .ngo-donation-icon { font-size: 50px; margin-bottom:
+      15px; } .ngo-donation-name { font-size: 18px; font-weight: 700; color:
+      #1CA7A6; margin-bottom: 12px; } .ngo-donation-info { color: #666; font-size:
+      13px; line-height: 1.5; margin-bottom: 18px; } .ngo-donate-btn { width:
+      100%; background: linear-gradient(135deg, #1CA7A6, #A7D8F5); color: white;
+      padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight:
+      600; transition: all 0.3s ease; font-size: 14px; } .ngo-donate-btn:hover
+      { transform: scale(1.02); } /* Donation Payment Modal */ .payment-modal
       { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,
       0, 0, 0.7); display: flex; justify-content: center; align-items: center;
       z-index: 3001; opacity: 0; pointer-events: none; transition: all 0.3s ease;
@@ -295,122 +319,6 @@
   border: 1px solid #ddd;
   outline: none;
 }
-
-/* NGO Cards */
-        .ngo-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-
-        .ngo-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 10px 35px rgba(2, 119, 189, 0.08);
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .ngo-card:hover {
-            border-color: #0277BD;
-            transform: translateY(-10px);
-        }
-
-        .ngo-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-        }
-
-        .ngo-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #0277BD;
-            margin-bottom: 15px;
-        }
-
-        .ngo-desc {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        .ngo-button {
-            background: linear-gradient(135deg, #0277BD, #00BCD4);
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .ngo-button:hover {
-            transform: scale(1.05);
-        }
-        /* NGO Donation List */
-        .ngo-donation-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 40px;
-        }
-
-        .ngo-donation-card {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 10px 35px rgba(2, 119, 189, 0.08);
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            cursor: pointer;
-        }
-
-        .ngo-donation-card:hover {
-            border-color: #0277BD;
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(2, 119, 189, 0.2);
-        }
-
-        .ngo-donation-icon {
-            font-size: 50px;
-            margin-bottom: 15px;
-        }
-
-        .ngo-donation-name {
-            font-size: 18px;
-            font-weight: 700;
-            color: #0277BD;
-            margin-bottom: 12px;
-        }
-
-        .ngo-donation-info {
-            color: #666;
-            font-size: 13px;
-            line-height: 1.5;
-            margin-bottom: 18px;
-        }
-
-        .ngo-donate-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #0277BD, #00BCD4);
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-
-        .ngo-donate-btn:hover {
-            transform: scale(1.02);
-        }
 
 .ai-input-bar button {
   background: #1ca7a6;
@@ -485,7 +393,306 @@
 </div>
 
       </div>
-      
+      <!-- Role Selection Modal -->
+      <div class="login-modal" id="roleModal">
+        <div class="login-box">
+          <div class="login-title">
+            🤝 Who Are You?
+          </div>
+          <div class="login-subtitle">
+            Select your role to access relevant features
+          </div>
+          <button class="hive-button" onclick="selectRole('ngo')" style="margin-top: 20px;">
+            🏢 I'm an NGO
+          </button>
+          <button class="hive-button" onclick="selectRole('hooman')" style="background: linear-gradient(135deg, #8B5CF6, #D084D0); margin-bottom: 15px;">
+            👤 I'm a HOOMAN (Supporter)
+          </button>
+          <p style="text-align: center; font-size: 12px; color: #999; margin-top: 20px;">
+            NGOs: Register, track rescued pets, and manage donations
+            <br>
+            HOOMANs: Browse adoptions and support rescues
+          </p>
+        </div>
+      </div>
+      <!-- NGO Verification Modal -->
+      <div class="login-modal" id="ngoVerificationModal">
+        <div class="login-box" style="max-width: 600px;">
+          <button class="close-modal" onclick="closeNGOVerification()">
+            ×
+          </button>
+          <div class="login-title">
+            📋 NGO Registration
+          </div>
+          <div class="login-subtitle">
+            Fill in your organization details
+          </div>
+          <form onsubmit="submitNGOForm(event)">
+            <!-- Person Name -->
+            <div style="margin-bottom: 20px;">
+              <label for="personName" style="display: block; font-weight: 600; color: #2E2E2E; margin-bottom: 8px;">
+                👤 Name of Person
+              </label>
+              <input type="text" id="personName" placeholder="Full Name" required style="width: 100%; padding: 12px 15px; border: 2px solid #DDD; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+              onfocus="this.style.borderColor='#1CA7A6'" onblur="this.style.borderColor='#DDD'">
+            </div>
+            <!-- NGO Name -->
+            <div style="margin-bottom: 20px;">
+              <label for="ngoName" style="display: block; font-weight: 600; color: #2E2E2E; margin-bottom: 8px;">
+                🏢 Name of NGO
+              </label>
+              <input type="text" id="ngoName" placeholder="Organization Name" required
+              style="width: 100%; padding: 12px 15px; border: 2px solid #DDD; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+              onfocus="this.style.borderColor='#1CA7A6'" onblur="this.style.borderColor='#DDD'">
+            </div>
+            <!-- NGO License -->
+            <div style="margin-bottom: 20px;">
+              <label for="ngoLicense" style="display: block; font-weight: 600; color: #2E2E2E; margin-bottom: 8px;">
+                📜 NGO Registered License
+              </label>
+              <input type="text" id="ngoLicense" placeholder="e.g., NGO/2024/12345"
+              required style="width: 100%; padding: 12px 15px; border: 2px solid #DDD; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+              onfocus="this.style.borderColor='#1CA7A6'" onblur="this.style.borderColor='#DDD'">
+            </div>
+            <!-- Registration Date -->
+            <div style="margin-bottom: 20px;">
+              <label for="registrationDate" style="display: block; font-weight: 600; color: #2E2E2E; margin-bottom: 8px;">
+                📅 Registered Date
+              </label>
+              <input type="date" id="registrationDate" required style="width: 100%; padding: 12px 15px; border: 2px solid #DDD; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+              onfocus="this.style.borderColor='#1CA7A6'" onblur="this.style.borderColor='#DDD'">
+            </div>
+            <!-- Location -->
+            <div style="margin-bottom: 20px;">
+              <label for="ngoLocation" style="display: block; font-weight: 600; color: #2E2E2E; margin-bottom: 8px;">
+                📍 Location of NGO
+              </label>
+              <input type="text" id="ngoLocation" placeholder="e.g., Rohini, Delhi"
+              required style="width: 100%; padding: 12px 15px; border: 2px solid #DDD; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+              onfocus="this.style.borderColor='#1CA7A6'" onblur="this.style.borderColor='#DDD'">
+            </div>
+            <button type="submit" class="hive-button" style="width: 100%; margin-top: 10px;">
+              ✅ Verify NGO Details
+            </button>
+            <button type="button" onclick="switchRole()" style="width: 100%; background: white; color: #1CA7A6; border: 2px solid #1CA7A6; margin-top: 10px; padding: 12px 15px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              ↩️ Switch to HOOMAN
+            </button>
+          </form>
+        </div>
+      </div>
+      <!-- NGO Verification Animation -->
+      <div class="login-modal" id="ngoVerifyingModal" style="display: none; z-index: 3001;">
+        <div class="login-box" style="text-align: center;">
+          <div style="font-size: 80px; animation: pulse 1.5s ease-in-out infinite; margin-bottom: 30px;">
+            🤖
+          </div>
+          <h2 style="font-size: 24px; font-weight: 800; color: #1CA7A6; margin-bottom: 15px;">
+            🔍 AI Verifying Details
+          </h2>
+          <p style="color: #666; font-size: 14px; margin-bottom: 30px;">
+            Analyzing your NGO registration information...
+          </p>
+          <div style="background: #FFF8F0; border-radius: 12px; padding: 20px; margin-bottom: 30px;">
+            <div style="display: flex; align-items: center; margin-bottom: 12px;">
+              <span id="verifyStep1" style="width: 30px; height: 30px; background: linear-gradient(135deg, #1CA7A6, #A7D8F5); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: 600; animation: pulse 1s ease-in-out infinite;">
+                ⏳
+              </span>
+              <span style="color: #2E2E2E;">
+                Validating NGO license...
+              </span>
+            </div>
+            <div style="display: flex; align-items: center; margin-bottom: 12px;">
+              <span id="verifyStep2" style="width: 30px; height: 30px; background: #DDD; color: #999; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: 600;">
+                2
+              </span>
+              <span style="color: #999;">
+                Checking registration date...
+              </span>
+            </div>
+            <div style="display: flex; align-items: center;">
+              <span id="verifyStep3" style="width: 30px; height: 30px; background: #DDD; color: #999; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: 600;">
+                3
+              </span>
+              <span style="color: #999;">
+                Generating NGO Hash ID...
+              </span>
+            </div>
+          </div>
+          <div style="background: #EEE; height: 6px; border-radius: 10px; overflow: hidden;">
+            <div style="height: 100%; background: linear-gradient(90deg, #1CA7A6, #A7D8F5); width: 0%; animation: loading-progress 6s ease-out forwards; border-radius: 10px;">
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- NGO Verified Success Modal -->
+      <div class="login-modal" id="ngoVerifiedModal" style="display: none; z-index: 3002;">
+        <div class="login-box" style="text-align: center;">
+          <div style="font-size: 80px; margin-bottom: 20px; animation: slideInUp 0.5s ease;">
+            ✅
+          </div>
+          <h2 style="font-size: 28px; font-weight: 800; color: #1CA7A6; margin-bottom: 15px;">
+            NGO Verified!
+          </h2>
+          <p style="color: #666; font-size: 16px; margin-bottom: 30px;">
+            Your organization has been successfully verified on VetraChain
+          </p>
+          <div style="background: #FFF8F0; border: 2px solid #1CA7A6; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+            <div style="font-size: 12px; color: #999; margin-bottom: 8px; text-transform: uppercase; font-weight: 600;">
+              NGO Hash ID
+            </div>
+            <div style="font-size: 20px; font-weight: 800; color: #1CA7A6; margin-bottom: 15px; font-family: monospace; letter-spacing: 2px;"
+            id="ngoHashDisplay">
+              --
+            </div>
+            <button onclick="copyNGOHash()" style="width: 100%; background: linear-gradient(135deg, #1CA7A6, #A7D8F5); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;"
+            onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+              📋 Copy NGO Hash ID
+            </button>
+          </div>
+          <button onclick="closeNGOVerifiedModal()" style="width: 100%; background: linear-gradient(135deg, #1CA7A6, #A7D8F5); color: white; padding: 15px; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 16px; transition: all 0.3s ease; margin-bottom: 10px;"
+          onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+            Continue to Dashboard
+          </button>
+          <button onclick="switchToHOOMANMode()" style="width: 100%; background: white; color: #1CA7A6; border: 2px solid #1CA7A6; padding: 12px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease;"
+          onmouseover="this.style.background='#FFF8F0'" onmouseout="this.style.background='white'">
+            ↩️ Switch to HOOMAN Mode
+          </button>
+        </div>
+      </div>
+      <!-- NGO Donation List Modal -->
+      <div class="login-modal" id="ngoDonationListModal">
+        <div style="background: white; border-radius: 20px; padding: 40px; max-width: 1000px; max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2); animation: slideIn 0.3s ease;">
+          <button class="close-modal" onclick="closeNGODonationList()" style="margin-bottom: 20px;">
+            ×
+          </button>
+          <h2 style="font-size: 32px; font-weight: 800; color: #1CA7A6; margin-bottom: 15px; text-align: center;">
+            💰 Support Animal Rescue NGOs
+          </h2>
+          <p style="color: #666; font-size: 15px; text-align: center; margin-bottom: 40px;">
+            Choose an NGO and make a transparent donation to help rescue and rehabilitate
+            animals
+          </p>
+          <div class="ngo-donation-grid" id="ngoDonationGrid">
+            <!-- NGO cards will be populated here -->
+          </div>
+        </div>
+      </div>
+      <!-- Payment Modal -->
+      <div class="payment-modal" id="paymentModal">
+        <div class="payment-box">
+          <button class="close-modal" onclick="closePaymentModal()">
+            ×
+          </button>
+          <div class="payment-header" id="paymentNGOName">
+            People for Animals (PFA)
+          </div>
+          <div class="payment-subheader">
+            Select your preferred payment method
+          </div>
+          <div class="payment-options">
+            <button class="payment-option-btn" onclick="selectPaymentMethod('upi')">
+              <span class="payment-option-icon">
+                📱
+              </span>
+              <span>
+                UPI Payment (Scan QR)
+              </span>
+            </button>
+            <button class="payment-option-btn" onclick="selectPaymentMethod('hive')">
+              <span class="payment-option-icon">
+                🔗
+              </span>
+              <span>
+                HIVE Token
+              </span>
+            </button>
+            <button class="payment-option-btn" onclick="selectPaymentMethod('usdt')">
+              <span class="payment-option-icon">
+                💵
+              </span>
+              <span>
+                USDT (Tron Network)
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- UPI QR Code Modal -->
+      <div class="payment-modal" id="upiQRModal">
+        <div class="payment-box" style="text-align: center;">
+          <button class="close-modal" onclick="closeUPIQR()">
+            ×
+          </button>
+          <div class="payment-header" id="upiNGOName">
+            People for Animals (PFA)
+          </div>
+          <div class="payment-subheader" style="margin-bottom: 25px;">
+            Scan to Donate via UPI
+          </div>
+          <div class="qr-container">
+            
+            <div class="qr-info">
+              <p style="font-weight: 600; margin-bottom: 5px;">
+                UPI: vvetrachain@upi
+              </p>
+              <p style="color: #999; font-size: 12px;">
+                Account Name: VetraChain NGO Support
+              </p>
+            </div>
+          </div>
+          <p style="color: #666; font-size: 13px; margin-bottom: 20px; line-height: 1.6;">
+            📸 Scan the QR code with your mobile phone's camera or UPI app to send
+            your donation. Your contribution will be verified and sent directly to
+            the NGO.
+          </p>
+          <button onclick="confirmUPIDonation()" style="width: 100%; background: linear-gradient(135deg, #1CA7A6, #A7D8F5); color: white; padding: 15px; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 16px; transition: all 0.3s ease;"
+          onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+            ✅ Donation Sent
+          </button>
+        </div>
+      </div>
+      <!-- Insufficient Balance Modal -->
+      <div class="payment-modal" id="insufficientBalanceModal">
+        <div class="payment-box" style="text-align: center;">
+          <div style="font-size: 80px; margin-bottom: 20px;">
+            ⚠️
+          </div>
+          <h2 style="font-size: 28px; font-weight: 800; color: #FF6B6B; margin-bottom: 15px;">
+            Insufficient Balance
+          </h2>
+          <p style="color: #666; font-size: 16px; margin-bottom: 30px;">
+            You don't have enough
+            <span id="insufficientTokenName">
+              HIVE
+            </span>
+            tokens in your wallet to complete this donation.
+          </p>
+          <div style="background: #FFE5E5; border-radius: 12px; padding: 20px; margin-bottom: 30px; text-align: left;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+              <span style="color: #666;">
+                Current Balance:
+              </span>
+              <span style="font-weight: 700; color: #FF6B6B;">
+                0
+                <span id="balanceTokenName">
+                  HIVE
+                </span>
+              </span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: #666;">
+                Try Alternative:
+              </span>
+              <span style="font-weight: 600; color: #1CA7A6; cursor: pointer;" onclick="switchToUPI()">
+                💱 Switch to UPI
+              </span>
+            </div>
+          </div>
+          <button onclick="closeInsufficientBalance()" style="width: 100%; background: linear-gradient(135deg, #1CA7A6, #A7D8F5); color: white; padding: 15px; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 16px; transition: all 0.3s ease;">
+            Go Back
+          </button>
+        </div>
+      </div>
       <!-- Location Modal (Add this if missing) -->
       <div class="location-modal" id="locationModal">
         <div class="location-box">
@@ -1052,7 +1259,43 @@
           </div>
         </footer>
       </div>
-      
+      <!-- NGO Support Section -->
+      <div class="page-section" id="ngo-section">
+        <section class="section">
+          <h2 class="section-title">
+            🐕 Stray Animal Support &amp; Adoption
+          </h2>
+          <p style="
+            max-width: 900px;
+            margin: 20px auto 50px;
+            text-align: center;
+            font-size: 16px;
+            color: #555;
+            line-height: 1.7;
+          ">
+            Discover trusted animal welfare NGOs working across Delhi–NCR to rescue,
+            treat, rehabilitate, and rehome stray animals. Support their work through
+            transparent donations, explore adoption opportunities, and help give them
+            a chance at a safer life.
+          </p>
+
+          <div id="ngoGrid" class="vet-grid"></div>
+          <div id="ngoCardsContainer" class="ngo-cards">
+            <!-- Cards will be dynamically rendered based on role -->
+          </div>
+        </section>
+        <footer class="footer">
+          <div class="footer-content">
+            <div class="footer-title">
+              🐾 VetraChain
+            </div>
+            <p class="footer-text">
+              AI-Powered Pet Healthcare Platform for Delhi with Hive Blockchain Integration
+            </p>
+          </div>
+        </footer>
+      </div>
+    </div>
     <!-- Open Chat Button -->
     <button class="open-chat-button" id="openChatBtn" onclick="openChatbot()"
     title="Open Chat">
@@ -1149,7 +1392,14 @@ auth.onAuthStateChanged(user => {
       let selectedNGOForDonation = null;
       let selectedPaymentMethod = null;
 
-
+/* ================= NGO DATABASE ================= */
+const ngoDonationList = [
+  { id: 1, name: 'People for Animals (PFA)', icon: '🐾', desc: 'One of India\'s largest animal welfare organisations, rescuing, treating and sheltering animals across Delhi & India.' },
+  { id: 2, name: 'Friendicoes SECA', icon: '🐶', desc: 'A well-known Delhi NGO providing rescue, treatment, shelter and ambulance services for stray dogs, cats & other animals.' },
+  { id: 3, name: 'Sanjay Gandhi Animal Care Centre (SGACC)', icon: '🏥', desc: 'One of Delhi\'s biggest animal care centres offering medical care & rehabilitation.' },
+  { id: 4, name: 'Blue Cross SOS (Agrovet Foundation)', icon: '🚑', desc: 'National animal rescue & welfare initiative handling emergency care, vaccinations, stray support and advocacy.' },
+  { id: 5, name: 'Earthlings Trust', icon: '🌿', desc: 'Large rescue & rehabilitation NGO near Delhi-NCR, treating hundreds of stray animals annually.' }
+];
 
 /* ================= LOADER ================= */
 window.addEventListener('load', () => {
@@ -1173,7 +1423,21 @@ function selectLocation(location) {
 }
 
 
-
+/* ================= NGO DONATION UI ================= */
+function renderNGODonationCards() {
+  const grid = document.getElementById('ngoDonationGrid');
+  grid.innerHTML = ngoDonationList.map(ngo => `
+    <div class="ngo-donation-card" onclick="selectNGOForDonation(${ngo.id})">
+      <div class="ngo-donation-icon">${ngo.icon}</div>
+      <div class="ngo-donation-name">${ngo.name}</div>
+      <div class="ngo-donation-info">${ngo.desc}</div>
+      <button class="ngo-donate-btn"
+        onclick="event.stopPropagation(); openPaymentModal(${ngo.id})">
+        💝 Donate Now
+      </button>
+    </div>
+  `).join('');
+}
 
 
 
@@ -1453,8 +1717,10 @@ function showNotification(message) {
   setTimeout(() => notification.remove(), 3000);
 }
 
-
-
+/* ================= CONFIRM UPI ================= */
+function confirmUPIDonation() {
+  showNotification(`✅ Donation to ${selectedNGOForDonation.name} initiated via UPI! 🎉`);
+}
 
 /* ================= PASSPORT ================= */
 function displayPassport() {
@@ -1782,8 +2048,141 @@ window.medicines = [
   }
 ];
 
+window.ngos = [
+  {
+    name: "People For Animals (PFA)",
+    area: "Rohini",
+    phone: "+91 98765 43210",
+    work: "Rescue, shelter, vaccination, adoption",
+    verified: true
+  },
+  {
+    name: "Friendicoes SECA",
+    area: "Jangpura",
+    phone: "+91 98111 22334",
+    work: "Emergency rescue & animal hospital",
+    verified: true
+  },
+  {
+    name: "Sanjay Gandhi Animal Care Centre",
+    area: "Raja Garden",
+    phone: "+91 98990 44556",
+    work: "Large animal hospital & shelter",
+    verified: true
+  },
+  {
+    name: "Red Paws Rescue",
+    area: "Greater Noida",
+    phone: "+91 99100 33445",
+    work: "Emergency rescue, rehabilitation & adoption of stray dogs",
+    verified: true
+  },
+  {
+    name: "Umeed For Animals Foundation",
+    area: "Noida Sector 62",
+    phone: "+91 98718 55667",
+    work: "Stray animal treatment, sterilization & community awareness",
+    verified: true
+  },
+  {
+    name: "House of Strays",
+    area: "East Delhi",
+    phone: "+91 98109 88990",
+    work: "Rescue, foster care & adoption of injured strays",
+    verified: false
+  },
+
+  {
+    name: "Blue Cross of India (Delhi)",
+    area: "South Delhi",
+    phone: "+91 98222 77889",
+    work: "Animal welfare & adoption",
+    verified: false
+  },
+  {
+    name: "PAWS Delhi",
+    area: "Dwarka",
+    phone: "+91 97654 11223",
+    work: "Stray dog rescue & feeding",
+    verified: false
+  }
+];
+
+function renderNGOs() {
+  const grid = document.getElementById("ngoGrid");
+  if (!grid) return;
+
+  grid.innerHTML = window.ngos.map(ngo => `
+    <div class="vet-card">
+      <div class="vet-header">
+        <div class="vet-name">${ngo.name}</div>
+        ${ngo.verified ? `<div class="vet-rating">✅ Verified</div>` : ""}
+      </div>
+
+      <div class="vet-area">📍 ${ngo.area}</div>
+
+      <div class="vet-spec">
+        🐾 ${ngo.work}
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:15px;">
+        <a href="tel:${ngo.phone}" class="vet-button">📞 Call</a>
+        <button class="vet-button" style="background:#6366f1">
+          ❤️ Donate
+        </button>
+      </div>
+    </div>
+  `).join("");
+}
 
 
+function populateMedicineFilters() {
+  const medicineSet = new Set();
+  const areaSet = new Set();
+
+  medicines.forEach(m => {
+    medicineSet.add(m.name);
+    areaSet.add(m.area);
+  });
+
+  const medicineSelect = document.getElementById("medicineSelect");
+  const areaSelect = document.getElementById("areaSelect");
+
+  medicineSet.forEach(med => {
+    const opt = document.createElement("option");
+    opt.value = med;
+    opt.textContent = med;
+    medicineSelect.appendChild(opt);
+  });
+
+  areaSet.forEach(area => {
+    const opt = document.createElement("option");
+    opt.value = area;
+    opt.textContent = area;
+    areaSelect.appendChild(opt);
+  });
+}
+populateMedicineFilters();
+
+function applyMedicineFilters() {
+  const selectedMedicine = document.getElementById("medicineSelect").value;
+  const selectedArea = document.getElementById("areaSelect").value;
+
+  let filtered = medicines;
+
+  // Check if any filter is applied
+  filtersApplied = !!(selectedMedicine || selectedArea);
+
+  if (selectedMedicine) {
+    filtered = filtered.filter(m => m.name === selectedMedicine);
+  }
+
+  if (selectedArea) {
+    filtered = filtered.filter(m => m.area === selectedArea);
+  }
+
+  renderMedicines(filtered);
+}
 
 
 function renderMedicines(data = medicines) {
@@ -1956,7 +2355,9 @@ function showSection(section) {
   if (section === "medicine") {
     renderMedicines(); // 🔥 ensures table always loads
   }
- 
+  if (section === "ngo") {
+    renderNGOs();
+  }
 
 }
 
