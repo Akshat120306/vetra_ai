@@ -1,0 +1,2355 @@
+<!doctype html>
+<html lang="en">
+  
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+      VetraChain – AI Pet Healthcare for Delhi
+    </title>
+    <script src="https://cdn.tailwindcss.com/3.4.17">
+    </script>
+    <!-- <script src="/_sdk/element_sdk.js">
+    </script> -->
+    <script src="https://cdn.jsdelivr.net/npm/hive-keychain@latest/lib/hive_keychain.js">
+    </script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; } html, body { height:
+      100%; width: 100%; } body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana,
+      sans-serif; background: #FFF8F0; color: #2E2E2E; } /* Loading Page Styles
+      */ .loading-container { position: fixed; top: 0; left: 0; right: 0; bottom:
+      0; background: linear-gradient(135deg, #FFF8F0 0%, #A7D8F5 100%); display:
+      flex; flex-direction: column; justify-content: center; align-items: center;
+      z-index: 9999; opacity: 1; transition: opacity 0.8s ease-out; } .loading-container.hidden
+      { opacity: 0; pointer-events: none; } .paw-logo { font-size: 80px; margin-bottom:
+      30px; animation: pulse-paw 1.5s ease-in-out infinite; } @keyframes pulse-paw
+      { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1);
+      opacity: 0.8; } } .heartbeat-line { width: 200px; height: 3px; background:
+      linear-gradient(90deg, #1CA7A6, #A7D8F5); margin: 20px 0; position: relative;
+      border-radius: 2px; overflow: hidden; } .heartbeat-line::after { content:
+      ''; position: absolute; top: 0; left: 0; bottom: 0; width: 100%; background:
+      linear-gradient(90deg, transparent, #FFB7A5, transparent); animation: heartbeat
+      2s ease-in-out infinite; } @keyframes heartbeat { 0% { left: -100%; } 100%
+      { left: 100%; } } .loading-text { font-size: 32px; font-weight: bold; color:
+      #1CA7A6; margin-top: 20px; text-align: center; } .loading-subtext { font-size:
+      14px; color: #2E2E2E; margin-top: 10px; opacity: 0.7; } .bone-loader {
+      width: 150px; height: 20px; background: #E0E0E0; border-radius: 20px; margin-top:
+      30px; overflow: hidden; position: relative; } .bone-loader::after { content:
+      ''; position: absolute; top: 0; left: 0; bottom: 0; width: 30%; background:
+      linear-gradient(90deg, #1CA7A6, #A7D8F5); border-radius: 20px; animation:
+      load 2s ease-in-out infinite; } @keyframes load { 0% { width: 0%; } 50%
+      { width: 100%; } 100% { width: 100%; } } /* Sticky Navbar */ .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background:
+      rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); border-bottom:
+      1px solid rgba(28, 167, 166, 0.1); padding: 1rem 2rem; width: 100%; } .navbar-content
+      { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between;
+      align-items: center; } .navbar-brand { display: flex; align-items: center;
+      gap: 10px; font-size: 22px; font-weight: bold; color: #1CA7A6; cursor:
+      pointer; } .navbar-links { display: flex; gap: 2rem; align-items: center;
+      list-style: none; } .navbar-links a { text-decoration: none; color: #2E2E2E;
+      font-size: 14px; font-weight: 500; transition: color 0.3s ease; cursor:
+      pointer; } .navbar-links a:hover { color: #1CA7A6; } .navbar-btn { background:
+      linear-gradient(135deg, #1CA7A6, #A7D8F5); color: white; padding: 10px
+      20px; border: none; border-radius: 25px; cursor: pointer; font-weight:
+      600; transition: transform 0.3s ease; } .navbar-btn:hover { transform:
+      translateY(-2px); } .user-info { display: flex; align-items: center; gap:
+      10px; font-size: 14px; color: #1CA7A6; font-weight: 600; } /* Page Sections
+      */ .page-section { display: none; margin-top: 70px; width: 100%; min-height:
+      calc(100% - 70px); overflow-y: auto; } .page-section.active { display:
+      block; } /* Hero Section */ .hero { background: linear-gradient(135deg,
+      #FFF8F0 0%, #A7D8F5 100%); padding: 80px 2rem; text-align: center; min-height:
+      600px; display: flex; flex-direction: column; justify-content: center;
+      align-items: center; position: relative; overflow: hidden; } .hero::before
+      { content: ''; position: absolute; top: -50%; right: -10%; width: 500px;
+      height: 500px; background: radial-gradient(circle, #FFB7A5 0%, transparent
+      70%); opacity: 0.3; animation: float 6s ease-in-out infinite; } .hero::after
+      { content: ''; position: absolute; bottom: -30%; left: -10%; width: 400px;
+      height: 400px; background: radial-gradient(circle, #CDB4DB 0%, transparent
+      70%); opacity: 0.2; animation: float 8s ease-in-out infinite reverse; }
+      @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform:
+      translateY(30px); } } .hero-content { position: relative; z-index: 2; max-width:
+      800px; } .hero-headline { font-size: 52px; font-weight: 800; color: #1CA7A6;
+      margin-bottom: 20px; line-height: 1.2; } .hero-subheading { font-size:
+      20px; color: #2E2E2E; margin-bottom: 40px; opacity: 0.8; line-height: 1.6;
+      } .hero-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap:
+      wrap; } .btn-primary { background: linear-gradient(135deg, #1CA7A6, #A7D8F5);
+      color: white; padding: 15px 35px; border: none; border-radius: 30px; font-size:
+      16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow:
+      0 10px 30px rgba(28, 167, 166, 0.3); } .btn-primary:hover { transform:
+      translateY(-3px); box-shadow: 0 15px 40px rgba(28, 167, 166, 0.4); } .btn-secondary
+      { background: white; color: #1CA7A6; padding: 15px 35px; border: 2px solid
+      #1CA7A6; border-radius: 30px; font-size: 16px; font-weight: 600; cursor:
+      pointer; transition: all 0.3s ease; } .btn-secondary:hover { background:
+      #1CA7A6; color: white; } /* Sections */ .section { padding: 80px 2rem;
+      max-width: 1400px; margin: 0 auto; width: 100%; } .section-title { font-size:
+      40px; font-weight: 800; color: #1CA7A6; margin-bottom: 50px; text-align:
+      center; } /* Open Chat Button */ .open-chat-button { position: fixed; bottom:
+      30px; right: 30px; z-index: 500; background: linear-gradient(135deg, #1CA7A6,
+      #A7D8F5); color: white; border: none; border-radius: 50%; width: 60px;
+      height: 60px; font-size: 28px; cursor: pointer; box-shadow: 0 10px 30px
+      rgba(28, 167, 166, 0.3); display: none; justify-content: center; align-items:
+      center; transition: all 0.3s ease; } .open-chat-button.show { display:
+      flex; } .open-chat-button:hover { transform: scale(1.1); } /* AI Chatbot
+      */ .chatbot-container { position: fixed; bottom: 30px; right: 30px; z-index:
+      500; width: 380px; max-width: 90vw; border-radius: 20px; background: white;
+      box-shadow: 0 20px 60px rgba(28, 167, 166, 0.2); overflow: hidden; animation:
+      slideUp 0.5s ease-out; display: flex; flex-direction: column; } @keyframes
+      slideUp { from { transform: translateY(400px); opacity: 0; } to { transform:
+      translateY(0); opacity: 1; } } .chatbot-container.hidden { display: none
+      !important; } .chatbot-container.collapsed { width: 60px; height: 60px;
+      } .chatbot-header { background: linear-gradient(135deg, #1CA7A6, #A7D8F5);
+      color: white; padding: 20px; display: flex; justify-content: space-between;
+      align-items: center; cursor: pointer; min-height: 60px; } .chatbot-title
+      { font-size: 16px; font-weight: 700; } .chatbot-controls { display: flex;
+      gap: 10px; align-items: center; } .chatbot-toggle { background: rgba(255,
+      255, 255, 0.2); border: none; color: white; font-size: 18px; cursor: pointer;
+      transition: all 0.3s ease; border-radius: 50%; width: 32px; height: 32px;
+      display: flex; justify-content: center; align-items: center; } .chatbot-toggle:hover
+      { background: rgba(255, 255, 255, 0.3); } .chatbot-close { background:
+      none; border: none; color: white; font-size: 24px; cursor: pointer; transition:
+      transform 0.3s ease; padding: 0; width: 32px; height: 32px; display: flex;
+      justify-content: center; align-items: center; } .chatbot-close:hover {
+      transform: rotate(90deg); } .chatbot-body { height: 400px; overflow-y:
+      auto; padding: 20px; display: flex; flex-direction: column; gap: 15px;
+      } .chatbot-container.collapsed .chatbot-body { display: none; } .chatbot-container.collapsed
+      .chatbot-footer { display: none; } .chat-message { padding: 12px 16px;
+      border-radius: 15px; max-width: 85%; word-wrap: break-word; font-size:
+      14px; line-height: 1.4; animation: fadeIn 0.3s ease; } @keyframes fadeIn
+      { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform:
+      translateY(0); } } .message-user { align-self: flex-end; background: linear-gradient(135deg,
+      #1CA7A6, #A7D8F5); color: white; } .message-bot { align-self: flex-start;
+      background: #F0F0F0; color: #2E2E2E; } .chatbot-footer { padding: 15px;
+      border-top: 1px solid #EEE; display: flex; gap: 10px; } .chat-input { flex:
+      1; padding: 10px 15px; border: 1px solid #DDD; border-radius: 20px; font-size:
+      14px; outline: none; transition: border-color 0.3s ease; } .chat-input:focus
+      { border-color: #1CA7A6; } .chat-send { background: linear-gradient(135deg,
+      #1CA7A6, #A7D8F5); color: white; border: none; border-radius: 50%; width:
+      40px; height: 40px; cursor: pointer; display: flex; justify-content: center;
+      align-items: center; transition: transform 0.3s ease; } .chat-send:hover
+      { transform: scale(1.1); } /* Vet Cards */ .vet-grid { display: grid; grid-template-columns:
+      repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; margin-top: 50px; } .vet-card
+      { background: white; border-radius: 20px; padding: 25px; box-shadow: 0
+      10px 35px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; border: 1px solid
+      rgba(28, 167, 166, 0.1); } .vet-card:hover { transform: translateY(-10px);
+      box-shadow: 0 20px 50px rgba(28, 167, 166, 0.2); } .vet-header { display:
+      flex; justify-content: space-between; align-items: start; margin-bottom:
+      15px; } .vet-name { font-size: 18px; font-weight: 700; color: #1CA7A6;
+      } .vet-rating { background: linear-gradient(135deg, #1CA7A6, #A7D8F5);
+      color: white; padding: 5px 12px; border-radius: 20px; font-size: 13px;
+      font-weight: 600; } .vet-area { color: #999; font-size: 14px; margin-bottom:
+      10px; } .vet-spec { font-size: 14px; color: #2E2E2E; margin-bottom: 15px;
+      padding: 8px 12px; background: #FFF8F0; border-radius: 8px; } .vet-badge
+      { display: inline-block; background: #B7E4C7; color: #1CA7A6; padding:
+      6px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; margin-bottom:
+      15px; } .vet-button { width: 100%; background: linear-gradient(135deg,
+      #1CA7A6, #A7D8F5); color: white; padding: 12px; border: none; border-radius:
+      12px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; } .vet-button:hover
+      { transform: scale(1.02); } /* Medicine Comparison Table */ .medicine-table
+      { width: 100%; border-collapse: collapse; background: white; border-radius:
+      15px; overflow: hidden; box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08); margin-top:
+      50px; } .medicine-table thead { background: linear-gradient(135deg, #1CA7A6,
+      #A7D8F5); color: white; } .medicine-table th { padding: 18px; text-align:
+      left; font-weight: 600; } .medicine-table td { padding: 18px; border-bottom:
+      1px solid #EEE; } .medicine-table tbody tr:hover { background: #FFF8F0;
+      } .price-badge { background: #B7E4C7; color: #1CA7A6; padding: 6px 12px;
+      border-radius: 15px; font-size: 12px; font-weight: 600; } /* Pet Type Selection
+      */ .pet-type-btn { flex: 1; padding: 15px; border: 2px solid #DDD; background:
+      white; border-radius: 12px; cursor: pointer; font-size: 16px; font-weight:
+      600; color: #2E2E2E; transition: all 0.3s ease; } .pet-type-btn:hover {
+      border-color: #1CA7A6; background: #FFF8F0; } .pet-type-selected { background:
+      linear-gradient(135deg, #1CA7A6, #A7D8F5); color: white; border-color:
+      #1CA7A6; } /* Pet Passport */ .passport-card { background: linear-gradient(135deg,
+      #1CA7A6, #A7D8F5); color: white; border-radius: 20px; padding: 40px; box-shadow:
+      0 20px 60px rgba(28, 167, 166, 0.3); position: relative; overflow: hidden;
+      animation: slideInPassport 0.6s ease-out; } @keyframes slideInPassport
+      { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0);
+      opacity: 1; } } .passport-card::before { content: ''; position: absolute;
+      top: -50%; right: -50%; width: 400px; height: 400px; background: repeating-linear-gradient(
+      60deg, transparent, transparent 20px, rgba(255, 255, 255, 0.1) 20px, rgba(255,
+      255, 255, 0.1) 40px ); animation: hexagon-rotate 20s linear infinite; }
+      @keyframes hexagon-rotate { 0% { transform: rotate(0deg); } 100% { transform:
+      rotate(360deg); } } .passport-content { position: relative; z-index: 2;
+      } .passport-title { font-size: 24px; font-weight: 800; margin-bottom: 30px;
+      } .passport-row { display: flex; justify-content: space-between; margin-bottom:
+      20px; font-size: 16px; } .passport-label { opacity: 0.8; } .passport-value
+      { font-weight: 600; } .passport-qr { width: 120px; height: 120px; background:
+      white; border-radius: 10px; margin-top: 30px; display: flex; justify-content:
+      center; align-items: center; font-size: 12px; color: #1CA7A6; font-weight:
+      600; }  /* Login Modal */ .login-modal { position:
+      fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0,
+      0.7); display: flex; justify-content: center; align-items: center; z-index:
+      2000; opacity: 0; pointer-events: none; transition: all 0.3s ease; } .login-modal.active
+      { opacity: 1; pointer-events: all; } .login-box { background: white; border-radius:
+      20px; padding: 40px; max-width: 500px; box-shadow: 0 30px 60px rgba(0,
+      0, 0, 0.2); animation: slideIn 0.3s ease; } @keyframes slideIn { from {
+      transform: translateY(-50px); opacity: 0; } to { transform: translateY(0);
+      opacity: 1; } } .login-title { font-size: 28px; font-weight: 800; color:
+      #1CA7A6; margin-bottom: 10px; text-align: center; } .login-subtitle { font-size:
+      14px; color: #666; text-align: center; margin-bottom: 30px; } .hive-button
+      { width: 100%; background: linear-gradient(135deg, #1CA7A6, #A7D8F5); color:
+      white; padding: 15px; border: none; border-radius: 12px; font-size: 16px;
+      font-weight: 700; cursor: pointer; transition: all 0.3s ease; margin-bottom:
+      15px; } .hive-button:hover { transform: translateY(-2px); box-shadow: 0
+      10px 30px rgba(28, 167, 166, 0.3); } .close-modal { background: none; border:
+      none; font-size: 28px; cursor: pointer; color: #999; float: right; margin-bottom:
+      20px; } /* Location Modal */ .location-modal { position: fixed; top: 0;
+      left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); display:
+      flex; justify-content: center; align-items: center; z-index: 2000; opacity:
+      0; pointer-events: none; transition: all 0.3s ease; } .location-modal.active
+      { opacity: 1; pointer-events: all; } .location-box { background: white;
+      border-radius: 20px; padding: 40px; max-width: 500px; box-shadow: 0 30px
+      60px rgba(0, 0, 0, 0.2); animation: slideIn 0.3s ease; } .location-title
+      { font-size: 24px; font-weight: 800; color: #1CA7A6; margin-bottom: 20px;
+      text-align: center; } .location-subtitle { font-size: 14px; color: #666;
+      text-align: center; margin-bottom: 25px; } .location-grid { display: grid;
+      grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px;
+      } .location-button { background: white; border: 2px solid #DDD; padding:
+      15px; border-radius: 12px; cursor: pointer; font-weight: 600; color: #2E2E2E;
+      transition: all 0.3s ease; font-size: 14px; } .location-button:hover {
+      border-color: #1CA7A6; background: #FFF8F0; transform: translateY(-2px);
+      } .location-button.selected { background: linear-gradient(135deg, #1CA7A6,
+      #A7D8F5); color: white; border-color: #1CA7A6; } .modal-close { background:
+      none; border: none; font-size: 28px; cursor: pointer; color: #999; float:
+      right; margin-bottom: 20px; } /* Footer */ .footer { background: linear-gradient(135deg,
+      #2E2E2E, #1CA7A6); color: white; padding: 60px 2rem; text-align: center;
+      } .footer-content { max-width: 1400px; margin: 0 auto; } .footer-title
+      { font-size: 24px; font-weight: 700; margin-bottom: 20px; } .footer-text
+      { opacity: 0.8; margin-bottom: 30px; line-height: 1.6; } .footer-links
+      { display: flex; justify-content: center; gap: 30px; margin-bottom: 30px;
+      flex-wrap: wrap; } .footer-links a { color: white; text-decoration: none;
+      transition: opacity 0.3s ease; cursor: pointer; } .footer-links a:hover
+      { opacity: 0.7; } .footer-bottom { border-top: 1px solid rgba(255, 255,
+      255, 0.2); padding-top: 30px; opacity: 0.7; } @media (max-width: 768px)
+      { .navbar-links { gap: 1rem; font-size: 12px; } .hero-headline { font-size:
+      36px; } .hero-subheading { font-size: 16px; } .hero-buttons { flex-direction:
+      column; } .btn-primary, .btn-secondary { width: 100%; } .chatbot-container
+      { width: 95vw; height: 500px; bottom: 10px; right: 10px; } .section-title
+      { font-size: 28px; } .vet-grid { grid-template-columns: 1fr; } .location-grid
+      { grid-template-columns: 1fr; } } .scrollable-content { width: 100%; height:
+      100%; overflow-y: auto; } @keyframes pulse { 0%, 100% { transform: scale(1);
+      } 50% { transform: scale(1.1); } } @keyframes loading-progress { 0% { width:
+      0%; } 100% { width: 100%; } } @keyframes slideDown { from { opacity: 1;
+      transform: translateX(-50%) translateY(0); } to { opacity: 0; transform:
+      translateX(-50%) translateY(20px); } } @keyframes slideInUp { from { transform:
+      translateY(30px); opacity: 0; } to { transform: translateY(0); opacity:
+      1; } } @keyframes mintBounce { 0%, 100% { transform: scale(1); } 50% {
+      transform: scale(1.05); } } .role-switch-banner { width: 100%; text-align:
+      center; margin-bottom: 40px; } .role-switch-banner button { background:
+      white; color: #1CA7A6; border: 2px solid #1CA7A6; padding: 12px 25px; border-radius:
+      20px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all
+      0.3s ease; } .role-switch-banner button:hover { background: #FFF8F0; transform:
+      translateY(-2px); }  /* Donation Payment Modal */ .payment-modal
+      { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,
+      0, 0, 0.7); display: flex; justify-content: center; align-items: center;
+      z-index: 3001; opacity: 0; pointer-events: none; transition: all 0.3s ease;
+      } .payment-modal.active { opacity: 1; pointer-events: all; } .payment-box
+      { background: white; border-radius: 20px; padding: 40px; max-width: 500px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2); animation: slideIn 0.3s ease;
+      } .payment-header { font-size: 24px; font-weight: 800; color: #1CA7A6;
+      margin-bottom: 10px; text-align: center; } .payment-subheader { font-size:
+      14px; color: #666; text-align: center; margin-bottom: 30px; } .payment-options
+      { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px;
+      } .payment-option-btn { background: white; border: 2px solid #DDD; padding:
+      18px; border-radius: 12px; cursor: pointer; font-weight: 600; color: #2E2E2E;
+      transition: all 0.3s ease; font-size: 15px; display: flex; align-items:
+      center; gap: 12px; } .payment-option-btn:hover { border-color: #1CA7A6;
+      background: #FFF8F0; transform: translateX(5px); } .payment-option-icon
+      { font-size: 24px; } /* QR Code Display */ .qr-container { background:
+      #FFF8F0; border-radius: 16px; padding: 30px; text-align: center; margin-bottom:
+      20px; } .qr-code-placeholder { width: 250px; height: 250px; background:
+      white; border: 2px solid #DDD; border-radius: 12px; margin: 0 auto 20px;
+      display: flex; align-items: center; justify-content: center; font-size:
+      80px; } .qr-info { font-size: 14px; color: #666; margin-bottom: 15px; }
+      /* Insufficient Balance */ .insufficient-balance { background: #FFE5E5;
+      border: 2px solid #FF6B6B; border-radius: 12px; padding: 20px; text-align:
+      center; margin-bottom: 20px; } .insufficient-balance-title { font-size:
+      16px; font-weight: 700; color: #FF6B6B; margin-bottom: 10px; } .insufficient-balance-text
+      { font-size: 13px; color: #999; margin-bottom: 15px; }
+      .ai-input-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border-top: 1px solid #eee;
+}
+
+.ai-plus-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #1ca7a6;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.ai-input-bar input[type="text"] {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  outline: none;
+}
+
+/* NGO Cards */
+        .ngo-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .ngo-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 35px rgba(2, 119, 189, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .ngo-card:hover {
+            border-color: #0277BD;
+            transform: translateY(-10px);
+        }
+
+        .ngo-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .ngo-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0277BD;
+            margin-bottom: 15px;
+        }
+
+        .ngo-desc {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .ngo-button {
+            background: linear-gradient(135deg, #0277BD, #00BCD4);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .ngo-button:hover {
+            transform: scale(1.05);
+        }
+        /* NGO Donation List */
+        .ngo-donation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .ngo-donation-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 35px rgba(2, 119, 189, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .ngo-donation-card:hover {
+            border-color: #0277BD;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(2, 119, 189, 0.2);
+        }
+
+        .ngo-donation-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .ngo-donation-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0277BD;
+            margin-bottom: 12px;
+        }
+
+        .ngo-donation-info {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .ngo-donate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #0277BD, #00BCD4);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .ngo-donate-btn:hover {
+            transform: scale(1.02);
+        }
+
+.ai-input-bar button {
+  background: #1ca7a6;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+    </style>
+    <style>
+      body { box-sizing: border-box; }
+    </style>
+    <!-- <script src="/_sdk/data_sdk.js" type="text/javascript">
+    </script> -->
+  </head>
+  
+  <body>
+    <div class="scrollable-content">
+      <!-- Loading Page -->
+      <div class="loading-container" id="loadingPage">
+        <div class="paw-logo">
+          🐾
+        </div>
+        <div class="heartbeat-line">
+        </div>
+        <div class="loading-text" id="brandName">
+          VetraChain
+        </div>
+        <div class="loading-subtext">
+          Smarter Healthcare for Delhi's Pets
+        </div>
+        <div class="bone-loader">
+        </div>
+      </div>
+      <!-- Login Modal -->
+      <div class="login-modal" id="loginModal">
+        <div class="login-box">
+  <button class="close-modal" onclick="closeLoginModal()">×</button>
+
+  <div class="login-title">🐾 VetraChain</div>
+  <div class="login-subtitle">Login to access your pet healthcare</div>
+
+  <!-- EMAIL LOGIN -->
+  <input id="email" type="email" placeholder="Email"
+    style="width:100%;padding:12px;margin-bottom:10px;border-radius:10px;border:1px solid #ccc;" />
+
+  <input id="password" type="password" placeholder="Password"
+    style="width:100%;padding:12px;margin-bottom:15px;border-radius:10px;border:1px solid #ccc;" />
+
+  <button onclick="loginWithEmail()"
+    style="width:100%;padding:12px;border-radius:10px;background:#1CA7A6;color:white;font-weight:600;margin-bottom:10px;">
+    Login with Email
+  </button>
+
+  <button onclick="signupWithEmail()"
+    style="width:100%;padding:12px;border-radius:10px;background:white;color:#1CA7A6;border:2px solid #1CA7A6;font-weight:600;margin-bottom:20px;">
+    Create Account
+  </button>
+
+  <hr style="margin:20px 0;opacity:0.4;" />
+
+  <!-- HIVE DEMO -->
+  <button class="hive-button" onclick="loginWithHiveKeychain()">
+    🔐 Login with Hive Keychain (Demo)
+  </button>
+
+  <p style="text-align:center;font-size:12px;color:#999;margin-top:15px;">
+    Hive Account Required
+  </p>
+</div>
+
+      </div>
+      
+      <!-- Location Modal (Add this if missing) -->
+      <div class="location-modal" id="locationModal">
+        <div class="location-box">
+          <button class="modal-close" onclick="closeLocationModal()">
+            ×
+          </button>
+          <div class="location-title">
+            📍 Select Your Location
+          </div>
+          <div class="location-subtitle">
+            Choose your area to find nearby vets
+          </div>
+          <div class="location-grid">
+            <button class="location-button" onclick="selectLocation('Rohini')">
+              Rohini
+            </button>
+            <button class="location-button" onclick="selectLocation('Saket')">
+              Saket
+            </button>
+            <button class="location-button" onclick="selectLocation('Pitampura')">
+              Pitampura
+            </button>
+            <button class="location-button" onclick="selectLocation('Dwarka')">
+              Dwarka
+            </button>
+            <button class="location-button" onclick="selectLocation('Janakpuri')">
+              Janakpuri
+            </button>
+            <button class="location-button" onclick="selectLocation('Hauz Khas')">
+              Hauz Khas
+            </button>
+            <button class="location-button" onclick="selectLocation('Karol Bagh')">
+              Karol Bagh
+            </button>
+            <button class="location-button" onclick="selectLocation('Greater Kailash')">
+              Greater Kailash
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Navbar -->
+      <nav class="navbar">
+        <div class="navbar-content">
+          <div class="navbar-brand" onclick="showSection('home')">
+            🐾
+            <span id="navBrandName">
+              VetraChain
+            </span>
+          </div>
+          <ul class="navbar-links">
+            <li>
+              <a onclick="showSection('home')">
+                Home
+              </a>
+            </li>
+            <li>
+              <a onclick="showSection('ai')">
+                AI Assistant
+              </a>
+            </li>
+            <li>
+              <a onclick="openLocationModal()">
+                Find Vets
+              </a>
+            </li>
+            <li>
+              <a onclick="showSection('medicine')">
+                Medicine Compare
+              </a>
+            </li>
+            <li>
+              <a onclick="showSection('passport')">
+                Pet Passport
+              </a>
+            </li>
+            <li>
+              <a onclick="openNGOSection()">
+                NGOs
+              </a>
+            </li>
+            <li>
+              <div class="user-info" id="userInfo" style="display: none;">
+                <span id="username">
+                  User
+                </span>
+                <button class="navbar-btn" onclick="logoutUser()">
+                  Logout
+                </button>
+              </div>
+              <button class="navbar-btn" id="loginBtn" onclick="openLoginModal()">
+                Login
+              </button>
+            </li>
+          </ul>
+        </div>
+      </nav>
+        
+      <!-- Home Section -->
+      <div class="page-section active" id="home-section">
+        <section class="hero" id="home">
+          <div class="hero-content">
+            <h1 class="hero-headline" id="heroHeadline">
+              AI-Powered Healthcare for Dogs &amp; Cats in Delhi
+            </h1>
+            <p class="hero-subheading" id="heroSubheading">
+              Compare prices. Discover trusted vets. Get instant pet health guidance.
+            </p>
+            <div class="hero-buttons">
+              <button class="btn-primary" onclick="showSection('ai')">
+                💬 Talk to AI Assistant
+              </button>
+              <button class="btn-secondary" onclick="openLocationModal()">
+                🔍 Find Nearby Vet
+              </button>
+            </div>
+          </div>
+        </section>
+        <footer class="footer">
+          <div class="footer-content">
+            <div class="footer-title">
+              🐾 VetraChain
+            </div>
+            <p class="footer-text">
+              AI-Powered Pet Healthcare Platform for Delhi with Hive Blockchain Integration
+            </p>
+            <div class="footer-links">
+              <a onclick="showSection('home')">
+                About
+              </a>
+              <a onclick="openLocationModal()">
+                Find Vets
+              </a>
+              <a onclick="showSection('medicine')">
+                Compare Medicines
+              </a>
+              <a onclick="openNGOSection()">
+                Support NGOs
+              </a>
+
+              <a onclick="showSection('ai')">
+                Contact
+              </a>
+            </div>
+            <div class="footer-bottom">
+              <p>
+                © 2024 VetraChain. All rights reserved. Revolutionizing Pet Healthcare
+                in Delhi with Hive Blockchain.
+              </p>
+            </div>
+          </div>
+        </footer>
+      </div>
+      <!-- AI Assistant Section -->
+      <div class="page-section" id="ai-section">
+        <section class="section">
+          <h2 class="section-title">
+            🤖 VetraAI – Your Pet Health Companion
+          </h2>
+          <section id="ai-assistant-chat" style="margin-top:50px;">
+          
+
+          <div style="
+            max-width: 900px;
+            margin: 30px auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+          ">
+            <zapier-interfaces-chatbot-embed
+              chatbot-id="cmlo6riii002q7gfqvoata5qy"
+              is-popup="false"
+              height="600px"
+              width="100%">
+            </zapier-interfaces-chatbot-embed>
+          </div>
+        </section>
+        <h2 style="text-align:center;color:#1CA7A6;">
+            🤖 Talk to VetraAI
+          </h2>
+
+          <p style="text-align:center;color:#666;">
+           Ask about symptoms, vaccines, medicines, or nearby vets.
+         </p>
+
+          <div style="text-align: center; max-width: 800px; margin: 0 auto; line-height: 1.8;">
+            <p style="font-size: 16px; color: #666; margin-bottom: 20px;">
+              Ask anything about your pet's health, nearby vets, or medicine prices.
+              Our AI chatbot is trained with veterinary knowledge to provide instant
+              guidance.
+            </p>
+            <p style="font-size: 14px; color: #999;">
+              💡 Tip: Try asking "My dog is vomiting", "Best vet in Rohini", or "Cheapest
+              vaccination price"
+            </p>
+          </div>
+        </section>
+        <footer class="footer">
+          <div class="footer-content">
+            <div class="footer-title">
+              🐾 VetraChain
+            </div>
+            <p class="footer-text">
+              AI-Powered Pet Healthcare Platform for Delhi with Hive Blockchain Integration
+            </p>
+          </div>
+        </footer>
+      </div>
+      <!-- Vets Section -->
+      <div class="page-section" id="vets-section">
+        <section class="section">
+          <h2 class="section-title" id="vetsTitle">
+            🏥 Top Rated Vets in Selected Area
+          </h2>
+          <div class="vet-grid" id="vetGrid">
+            <!-- Vet cards will be dynamically generated -->
+          </div>
+        </section>
+        <footer class="footer">
+          <div class="footer-content">
+            <div class="footer-title">
+              🐾 VetraChain
+            </div>
+            <p class="footer-text">
+              AI-Powered Pet Healthcare Platform for Delhi with Hive Blockchain Integration
+            </p>
+          </div>
+        </footer>
+      </div>
+      <!-- Medicine Comparison Section -->
+      <div class="page-section" id="medicine-section">
+        <section class="section">
+          <h2 class="section-title">
+            💊 Medicine Price Comparison
+          </h2>
+          <div style="
+            display:flex;
+            gap:16px;
+            flex-wrap:wrap;
+            margin-bottom:25px;
+          ">
+
+            <!-- Medicine Select -->
+            <select id="medicineSelect"
+              onchange="applyMedicineFilters()"
+              style="
+                padding:12px;
+                border-radius:12px;
+                border:2px solid #ddd;
+                min-width:220px;
+              ">
+              <option value="">Select Medicine</option>
+            </select>
+
+            <!-- Location Select -->
+            <select id="areaSelect"
+              onchange="applyMedicineFilters()"
+              style="
+                padding:12px;
+                border-radius:12px;
+                border:2px solid #ddd;
+                min-width:220px;
+              ">
+              <option value="">Select Locality</option>
+            </select>
+
+          </div>
+
+          <div style="
+            background:#fff3cd;
+            border-left:6px solid #f59e0b;
+            padding:16px;
+            border-radius:12px;
+            margin-bottom:25px;
+          ">
+            <b>⚠️ Medicine Price Trap Detected (Delhi NCR)</b><br>
+            Same life-saving pet medicine shows up to
+            <b>50% price difference</b> across nearby pharmacies.
+          </div>
+
+          <table class="medicine-table">
+            <thead>
+              <tr>
+                <th>
+                  Medicine
+                </th>
+                <th>
+                  Store
+                </th>
+                <th>
+                  Area
+                </th>
+                <th>
+                  Price
+                </th>
+                <th>
+                  Availability
+                </th>
+                <th>
+                  Status
+                </th>
+              </tr>
+            </thead>
+            <tbody id="medicineTable">
+              <!-- Medicine rows will be generated -->
+            </tbody>
+          </table>
+        </section>
+        <footer class="footer">
+          <div class="footer-content">
+            <div class="footer-title">
+              🐾 VetraChain
+            </div>
+            <p class="footer-text">
+              AI-Powered Pet Healthcare Platform for Delhi with Hive Blockchain Integration
+            </p>
+          </div>
+        </footer>
+      </div>
+      <!-- Pet Passport Section -->
+      <div class="page-section" id="passport-section">
+        <section class="section">
+          <h2 class="section-title">
+            🆔 Digital Pet Health Passport
+          </h2>
+          <!-- Login Required Container -->
+          <div id="passportLoginContainer" style="max-width: 600px; margin: 0 auto; text-align: center; padding: 60px 20px;">
+            <div style="font-size: 80px; margin-bottom: 30px;">
+              🔐
+            </div>
+            <h3 style="font-size: 24px; font-weight: 700; color: #1CA7A6; margin-bottom: 15px;">
+              Login Required
+            </h3>
+            <p style="color: #666; font-size: 16px; margin-bottom: 30px;">
+              You need to be logged in to create your pet's digital passport. This ensures
+              your pet's health records are secure and personalized.
+            </p>
+            <button class="btn-primary" onclick="openLoginModal()" style="padding: 15px 35px; font-size: 16px;">
+              🔐 Login with Hive Keychain
+            </button>
+          </div>
+          <!-- Form Container -->
+          <div id="passportFormContainer" style="max-width: 600px; margin: 0 auto; display: none;">
+            <div style="background: white; border-radius: 20px; padding: 40px; box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);">
+              <h3 style="font-size: 20px; font-weight: 700; color: #1CA7A6; margin-bottom: 30px; text-align: center;">
+                Create Your Pet's Passport
+              </h3>
+              <!-- Pet Type Selection -->
+              <div style="margin-bottom: 25px;">
+                <label style="display: block; font-weight: 600; color: #2E2E2E; margin-bottom: 12px;">
+                  🐾 What type of pet?
+                </label>
+                <div style="display: flex; gap: 15px;">
+                  <button class="pet-type-btn pet-type-selected" id="petTypeDog" onclick="selectPetType('dog')">
+                    🐕 Dog
+                  </button>
+                  <button class="pet-type-btn" id="petTypeCat" onclick="selectPetType('cat')">
+                    🐱 Cat
+                  </button>
+                </div>
+              </div>
+              <!-- Breed Input -->
+              <div style="margin-bottom: 25px;">
+                 <label style="display:block;font-weight:600;margin-bottom:8px;">
+                   Breed
+                 </label>
+                <select id="petBreed"
+                  style="width:100%;padding:12px;border-radius:12px;border:2px solid #DDD;">
+                <option value="">Select Breed</option>
+                </select>
+              </div>
+
+              <!-- Pet Name Input -->
+              <div style="margin-bottom: 25px;">
+                <label for="petName" style="display: block; font-weight: 600; color: #2E2E2E; margin-bottom: 8px;">
+                  Pet Name
+                </label>
+                <input type="text" id="petName" placeholder="e.g., Bruno, Whiskers" style="width: 100%; padding: 12px 15px; border: 2px solid #DDD; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+                onfocus="this.style.borderColor='#1CA7A6'" onblur="this.style.borderColor='#DDD'">
+              </div>
+              <!-- Age Input -->
+              <div style="margin-bottom: 25px;">
+                <label for="petAge" style="display: block; font-weight: 600; color: #2E2E2E; margin-bottom: 8px;">
+                  Age (years)
+                </label>
+                <input type="number" id="petAge" placeholder="e.g., 3" min="0" max="30"
+                style="width: 100%; padding: 12px 15px; border: 2px solid #DDD; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+                onfocus="this.style.borderColor='#1CA7A6'" onblur="this.style.borderColor='#DDD'">
+              </div>
+              <!-- Allergies Input -->
+              <div style="margin-bottom: 25px;">
+                <label for="petAllergies" style="display: block; font-weight: 600; color: #2E2E2E; margin-bottom: 8px;">
+                  Allergies (if any)
+                </label>
+                <input type="text" id="petAllergies" placeholder="e.g., Chicken, Dairy - Leave blank if none"
+                style="width: 100%; padding: 12px 15px; border: 2px solid #DDD; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+                onfocus="this.style.borderColor='#1CA7A6'" onblur="this.style.borderColor='#DDD'">
+              </div>
+              <!-- Last Checkup Input -->
+              <div style="margin-bottom: 30px;">
+                <label for="petLastCheckup" style="display: block; font-weight: 600; color: #2E2E2E; margin-bottom: 8px;">
+                  Last Checkup (Clinic &amp; Date)
+                </label>
+                <input type="text" id="petLastCheckup" placeholder="e.g., Rohini Clinic - 15 Jan"
+                style="width: 100%; padding: 12px 15px; border: 2px solid #DDD; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+                onfocus="this.style.borderColor='#1CA7A6'" onblur="this.style.borderColor='#DDD'">
+              </div>
+              <!-- Create Button -->
+              <button class="btn-primary" onclick="generatePassport()" style="width: 100%; padding: 15px; font-size: 16px;">
+                Create My Pet Passport ✨
+              </button>
+            </div>
+          </div>
+          <!-- Minting Animation Container -->
+          <div id="mintingContainer" style="display: none; text-align: center; max-width: 600px; margin: 0 auto; padding: 60px 20px;">
+            <div style="font-size: 80px; animation: mintBounce 1.5s ease-in-out infinite; margin-bottom: 30px;">
+              🔐
+            </div>
+            <h3 style="font-size: 24px; font-weight: 700; color: #1CA7A6; margin-bottom: 15px;">
+              Minting Your Pet Passport
+            </h3>
+            <p style="color: #666; font-size: 16px; margin-bottom: 40px;">
+              Creating a blockchain-secure digital identity for your beloved pet...
+            </p>
+            <!-- Animated Progress Bar -->
+            <div style="background: #EEE; height: 8px; border-radius: 10px; overflow: hidden; margin-bottom: 20px;">
+              <div id="mintProgress" style="height: 100%; background: linear-gradient(90deg, #1CA7A6, #A7D8F5); width: 0%; border-radius: 10px; animation: mintProgress 3s ease-out forwards;">
+              </div>
+            </div>
+            <!-- Minting Steps -->
+            <div id="mintingSteps" style="text-align: left; background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+              <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                <span id="step1" style="width: 30px; height: 30px; background: linear-gradient(135deg, #1CA7A6, #A7D8F5); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: 600;">
+                  ✓
+                </span>
+                <span style="color: #2E2E2E;">
+                  Registering pet information...
+                </span>
+              </div>
+              <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                <span id="step2" style="width: 30px; height: 30px; background: #DDD; color: #999; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: 600;">
+                  2
+                </span>
+                <span style="color: #999;">
+                  Creating health record...
+                </span>
+              </div>
+              <div style="display: flex; align-items: center;">
+                <span id="step3" style="width: 30px; height: 30px; background: #DDD; color: #999; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: 600;">
+                  3
+                </span>
+                <span style="color: #999;">
+                  Minting on blockchain...
+                </span>
+              </div>
+            </div>
+          </div>
+          <!-- Passport Card Display -->
+          <div id="passportCardContainer" style="display: none; max-width: 600px; margin: 0 auto;">
+            <div class="passport-card">
+              <div class="passport-content">
+                <div class="passport-title" id="passportTitle">
+                  🐕 Pet's Health Passport
+                </div>
+                <div class="passport-row">
+                  <span class="passport-label">
+                    Pet Type:
+                  </span>
+                  <span class="passport-value" id="passportType">
+                    Dog
+                  </span>
+                </div>
+                <div class="passport-row">
+                  <span class="passport-label">
+                    Pet Name:
+                  </span>
+                  <span class="passport-value" id="passportName">
+                    --
+                  </span>
+                </div>
+                <div class="passport-row">
+                  <span class="passport-label">
+                    Breed:
+                  </span>
+                  <span class="passport-value" id="passportBreed">
+                    --
+                  </span>
+                </div>
+                <div class="passport-row">
+                  <span class="passport-label">
+                    Age:
+                  </span>
+                  <span class="passport-value" id="passportAge">
+                    --
+                  </span>
+                </div>
+                <div class="passport-row">
+                  <span class="passport-label">
+                    Vaccination Status:
+                  </span>
+                  <span class="passport-value">
+                    ✓ Up to Date
+                  </span>
+                </div>
+                <div class="passport-row">
+                  <span class="passport-label">
+                    Allergies:
+                  </span>
+                  <span class="passport-value" id="passportAllergies">
+                    None
+                  </span>
+                </div>
+                <div class="passport-row">
+                  <span class="passport-label">
+                    Last Checkup:
+                  </span>
+                  <span class="passport-value" id="passportCheckup">
+                    --
+                  </span>
+                </div>
+                <div id="passportQR"
+                    style="margin-top:15px;font-size:12px;
+                    background:#fff;padding:10px;border-radius:8px;">
+                </div>
+
+                
+                  <button
+                    onclick="deletePassport()"
+                    style="width:100%;margin-top:20px;
+                    background:#ffecec;
+                    color:#d63031;
+                    border:2px solid #d63031;
+                    padding:12px;
+                    border-radius:12px;
+                    font-weight:600;
+                    cursor:pointer;">
+                    🗑️ Delete Pet Passport
+                  </button>
+                <div class="mt-4 p-3 bg-gray-100 rounded">
+                  <p class="text-xs text-gray-600">🔗 Blockchain Hash</p>
+                  <p id="blockchainHashUI"
+                    class="text-xs break-all font-mono text-gray-800"></p>
+                </div>
+
+                <button
+                  onclick="verifyIntegrity()"
+                  class="mt-3 w-full bg-black text-white py-2 rounded">
+                  Verify Blockchain Integrity
+                </button>
+                
+
+
+              </div>
+            </div>
+          </div>
+        </section>
+        <footer class="footer">
+          <div class="footer-content">
+            <div class="footer-title">
+              🐾 VetraChain
+            </div>
+            <p class="footer-text">
+              AI-Powered Pet Healthcare Platform for Delhi with Hive Blockchain Integration
+            </p>
+          </div>
+        </footer>
+      </div>
+      
+    <!-- Open Chat Button -->
+    <button class="open-chat-button" id="openChatBtn" onclick="openChatbot()"
+    title="Open Chat">
+      💬
+    </button>
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <script>
+      let petContext = null;
+
+      const petBreeds = {
+        dog: [
+          "Labrador Retriever",
+          "German Shepherd",
+          "Golden Retriever",
+          "Pug",
+          "Beagle",
+          "Indie Dog"
+        ],
+        cat: [
+         "Persian",
+         "Maine Coon",
+          "Siamese",
+         "Bengal",
+         "Indie Cat"
+        ]
+      };
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDytWfShqS-GzkqwlrQ-fEERu73AZSFJL0",
+        authDomain: "vetrachain-7721f.firebaseapp.com",
+        projectId: "vetrachain-7721f",
+        storageBucket: "vetrachain-7721f.firebasestorage.app",
+        messagingSenderId: "467179815416",
+        appId: "1:467179815416:web:c17c4d2c6a9b31c525160d",
+        measurementId: "G-M6BDP76MTP"
+      };
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();   // ✅ ADD THIS LINE
+const db = firebase.firestore();
+
+auth.onAuthStateChanged(user => {
+
+  if (user) {
+    console.log("Auth restored:", user.uid);
+
+    currentUser = user.uid;
+    authType = "firebase";
+    userRole = "pet_owner";
+
+    // Navbar UI
+    document.getElementById("loginBtn").style.display = "none";
+    document.getElementById("userInfo").style.display = "flex";
+    document.getElementById("username").innerText = user.email;
+
+    updatePassportAccess();
+    loadPetPassport(); // 🔥 THIS IS THE KEY
+  } else {
+    console.log("No Firebase user");
+    currentUser = null;
+    updatePassportAccess();
+  }
+});
+
+
+      const config = {
+        brand_name: 'VetraChain',
+        hero_headline: 'AI-Powered Healthcare for Dogs & Cats in Delhi',
+        hero_subheading: 'Compare prices. Discover trusted vets. Get instant pet health guidance.',
+        ai_assistant_title: 'VetraAI – Your Pet Health Companion'
+      };
+      const defaultConfig = {
+        brand_name: 'VetraChain',
+        hero_headline: 'AI-Powered Healthcare for Dogs & Cats in Delhi',
+        hero_subheading: 'Compare prices. Discover trusted vets. Get instant pet health guidance.',
+        ai_assistant_title: 'VetraAI – Your Pet Health Companion'
+      };
+      let hiveUser = null;
+      let filtersApplied = false;
+      let currentUser = null;
+      let authType = null;
+      let currentWalletAddress = null;
+      let selectedLocation = null;
+      let selectedPetType = 'dog';
+      let userRole = null;
+      let ngoData = null;
+      let currentNGOHash = null;
+      let selectedNGOForDonation = null;
+      let selectedPaymentMethod = null;
+
+
+
+/* ================= LOADER ================= */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const loadingPage = document.getElementById('loadingPage');
+    if (loadingPage) loadingPage.style.display = 'none';
+  }, 2500);
+});
+
+
+function selectLocation(location) {
+  selectedLocation = location;
+
+  closeLocationModal();
+  showSection("vets");
+
+  document.getElementById("vetsTitle").innerText =
+    `🏥 Top Vets in ${location}`;
+
+  fetchVetsByLocation(location);
+}
+
+
+
+
+
+
+  
+
+function loginWithHiveKeychain() {
+  // If Hive Keychain exists
+  if (window.hive_keychain) {
+    window.hive_keychain.requestSignBuffer(
+      "demo_user",
+      "Login to VetraChain",
+      "Posting",
+      function (response) {
+        if (response.success) {
+          onHiveLoginSuccess("demo_user");
+        } else {
+          alert("Hive login cancelled");
+        }
+      }
+    );
+  } 
+  // 🔥 FALLBACK MODE (IMPORTANT FOR DEMO)
+  else {
+    console.log("Hive not found, using demo login");
+    onHiveLoginSuccess("demo_user");
+  }
+}
+function openAIChatbot() {
+  const chatbot = document.querySelector("zapier-interfaces-chatbot-embed");
+  if (chatbot) {
+    chatbot.open = true;   // 🔥 THIS opens the popup
+  }
+}
+
+function onHiveLoginSuccess(username) {
+  console.log("Hive login success:", username);
+
+  currentUser = username;
+  currentWalletAddress = username;
+  userRole = "pet_owner";
+
+  // UI updates
+  document.getElementById("loginModal").classList.remove("active");
+  document.getElementById("loginBtn").style.display = "none";
+  document.getElementById("userInfo").style.display = "flex";
+  document.getElementById("username").innerText = username;
+
+  updatePassportAccess();
+  loadPetPassport();
+  loadPetContext();
+
+  alert("Logged in as " + username);
+}
+function updatePassportAccess() {
+  const loginBox = document.getElementById("passportLoginContainer");
+  const formBox = document.getElementById("passportFormContainer");
+
+  if (!loginBox || !formBox) return;
+
+  if (currentUser) {
+    loginBox.style.display = "none";
+    formBox.style.display = "block";
+  } else {
+    loginBox.style.display = "block";
+    formBox.style.display = "none";
+  }
+}
+
+function loginWithEmail() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  firebase.auth()
+    .signInWithEmailAndPassword(email, password)
+    .then(res => {
+      onFirebaseLoginSuccess(res.user);
+    })
+    .catch(err => alert(err.message));
+}
+
+function buildAIPrompt(userMessage) {
+  if (!window.petContext) {
+    return `You are a veterinary AI assistant. User says: ${userMessage}`;
+  }
+
+  return `
+You are a professional veterinary AI.
+
+Pet details:
+- Name: ${petContext.name}
+- Type: ${petContext.petType}
+- Breed: ${petContext.breed}
+- Age: ${petContext.age}
+- Allergies: ${petContext.allergies}
+- Last Checkup: ${petContext.lastCheckup}
+
+User question:
+${userMessage}
+
+Give safe, clear medical guidance. If serious, advise visiting a vet.
+`;
+}
+
+
+
+function signupWithEmail() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  firebase.auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then(res => {
+      return db.collection("users").doc(res.user.uid).set({
+        email: email,
+        role: "pet_owner",
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    })
+    .then(() => {
+      onFirebaseLoginSuccess(firebase.auth().currentUser);
+    })
+    .catch(err => alert(err.message));
+}
+function deletePassport() {
+  if (!currentUser) return;
+
+  if (!confirm("Are you sure you want to delete this pet passport?")) return;
+
+  db.collection("pet_passports")
+    .where("ownerId", "==", currentUser)
+    .get()
+    .then(snapshot => {
+      const batch = db.batch();
+      snapshot.forEach(doc => batch.delete(doc.ref));
+      return batch.commit();
+    })
+    .then(() => {
+      document.getElementById("passportCardContainer").style.display = "none";
+      document.getElementById("passportFormContainer").style.display = "block";
+      alert("Pet passport deleted");
+    })
+    .catch(err => alert(err.message));
+}
+function loadPetContext() {
+  if (!currentUser) return;
+
+  db.collection("pet_passports")
+    .where("ownerId", "==", currentUser)
+    .limit(1)
+    .get()
+    .then(snapshot => {
+      if (!snapshot.empty) {
+        petContext = snapshot.docs[0].data();
+        console.log("🐾 Pet context loaded:", petContext);
+      }
+    });
+}
+
+function onFirebaseLoginSuccess(user) {
+  currentUser = user.uid;
+  userRole = "pet_owner";
+  authType = "firebase";
+
+  document.getElementById("loginModal").classList.remove("active");
+  document.getElementById("loginBtn").style.display = "none";
+  document.getElementById("userInfo").style.display = "flex";
+  document.getElementById("username").innerText = user.email;
+
+  updatePassportAccess();
+  loadPetPassport();
+  loadPetContext();
+
+
+  alert("Logged in as " + user.email);
+}
+function updateBreedDropdown() {
+  const breedSelect = document.getElementById("petBreed");
+  breedSelect.innerHTML = `<option value="">Select Breed</option>`;
+
+  petBreeds[selectedPetType].forEach(breed => {
+    const opt = document.createElement("option");
+    opt.value = breed;
+    opt.textContent = breed;
+    breedSelect.appendChild(opt);
+  });
+}
+function selectPetType(type) {
+  selectedPetType = type;
+
+  document.getElementById("petTypeDog").classList.remove("pet-type-selected");
+  document.getElementById("petTypeCat").classList.remove("pet-type-selected");
+
+  if (type === "dog") {
+    document.getElementById("petTypeDog").classList.add("pet-type-selected");
+  } else {
+    document.getElementById("petTypeCat").classList.add("pet-type-selected");
+  }
+
+  updateBreedDropdown();
+}
+
+function savePetData(petData) {
+  db.collection("pets").add({
+    ownerId: currentUser,
+    authType: authType, // firebase or hive-demo
+    ...petData,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  })
+  .then(() => alert("Pet data saved"))
+  .catch(err => alert(err.message));
+}
+document.addEventListener("DOMContentLoaded", () => {
+  const stored = localStorage.getItem("vetrachain_passport");
+  if (!stored) return;
+
+  const { passportData, blockchainHash } = JSON.parse(stored);
+
+  // restore globals for verification
+  window.currentPassportData = passportData;
+  window.currentBlockchainHash = blockchainHash;
+
+  // show hash in UI
+  const hashBox = document.getElementById("blockchainHashValue");
+  if (hashBox) hashBox.innerText = blockchainHash;
+
+  // restore QR
+  generateQRCode(blockchainHash);
+});
+
+function logoutUser() {
+  if (authType === "firebase") {
+    firebase.auth().signOut();
+  }
+
+  currentUser = null;
+  authType = null;
+
+  document.getElementById("userInfo").style.display = "none";
+  document.getElementById("loginBtn").style.display = "block";
+
+  updatePassportAccess();
+  
+  alert("Logged out");
+}
+function getCanonicalPassportData(petData) {
+  return {
+    petType: petData.petType,
+    name: petData.name,
+    breed: petData.breed,
+    age: petData.age,
+    allergies: petData.allergies,
+    lastCheckup: petData.lastCheckup,
+    immutable: true
+  };
+}
+
+
+
+/* ================= NOTIFICATIONS ================= */
+function showNotification(message) {
+  const notification = document.createElement('div');
+  notification.style.cssText = `
+    position: fixed;
+    bottom: 400px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #1CA7A6, #A7D8F5);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    font-weight: 600;
+    z-index: 2001;
+  `;
+  notification.textContent = message;
+  document.body.appendChild(notification);
+
+  setTimeout(() => notification.remove(), 3000);
+}
+
+
+
+
+/* ================= PASSPORT ================= */
+function displayPassport() {
+  const petIcon = selectedPetType === 'dog' ? '🐕' : '🐱';
+  const name = document.getElementById('petName').value;
+  document.getElementById('passportTitle').textContent =
+    `${petIcon} ${name}'s Health Passport`;
+
+  showNotification(`✅ ${name}'s passport has been minted! 🎉`);
+}
+
+
+function loadPetPassport() {
+  if (!currentUser) {
+    console.log("No user, cannot load passport");
+    return;
+  }
+
+  db.collection("pet_passports")
+    .where("ownerId", "==", currentUser)
+    .orderBy("createdAt", "desc")
+    .limit(1)
+    .get()
+    .then(snapshot => {
+      if (!snapshot.empty) {
+        const petData = snapshot.docs[0].data();
+        window.petContext = petData;
+
+
+        // Hide login + form
+        document.getElementById("passportLoginContainer").style.display = "none";
+        document.getElementById("passportFormContainer").style.display = "none";
+        document.getElementById("mintingContainer").style.display = "none";
+        document.getElementById("passportCardContainer").style.display = "block";
+
+        // Fill passport
+        document.getElementById("passportType").innerText = petData.petType;
+        document.getElementById("passportName").innerText = petData.name;
+        document.getElementById("passportBreed").innerText = petData.breed;
+        document.getElementById("passportAge").innerText = petData.age;
+        document.getElementById("passportAllergies").innerText = petData.allergies;
+        document.getElementById("passportCheckup").innerText = petData.lastCheckup;
+
+        generateQRCode();
+      } else {
+        // No passport yet → show form
+        document.getElementById("passportLoginContainer").style.display = "none";
+        document.getElementById("passportFormContainer").style.display = "block";
+      }
+    })
+    .catch(err => console.error("Load passport error:", err));
+}
+async function uploadPassportToIPFS(data) {
+  // 🔥 DEMO MODE: Simulated IPFS hash
+  const fakeHash =
+    "Qm" +
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15);
+
+  console.log("🧪 DEMO IPFS HASH:", fakeHash);
+
+  return fakeHash;
+}
+
+function generateBlockchainHash(data) {
+  return CryptoJS.SHA256(JSON.stringify(data)).toString();
+}
+document.addEventListener("DOMContentLoaded", () => {
+  const stored = localStorage.getItem("vetrachain_passport");
+  if (!stored) return;
+
+  const { passportData, blockchainHash } = JSON.parse(stored);
+
+  // restore globals
+  window.currentPassportData = passportData;
+  window.currentBlockchainHash = blockchainHash;
+
+  // restore UI
+  const hashEl = document.getElementById("blockchainHashUI");
+  if (hashEl) {
+    hashEl.innerText = blockchainHash;
+  }
+
+  // optional: restore passport card visibility
+  document.getElementById("passportFormContainer").style.display = "none";
+  document.getElementById("passportCardContainer").style.display = "block";
+});
+
+
+/* ================= MEDICINES ================= */
+window.medicines = [
+  // ================= Paracetamol 500mg =================
+  {
+    name: "Paracetamol 500mg",
+    store: "Gupta Medicos",
+    area: "Laxmi Nagar",
+    price: 18,
+    availability: "Available",
+    verified: true,
+    distance: 1.2
+  },
+  {
+    name: "Paracetamol 500mg",
+    store: "Apollo Pharmacy",
+    area: "Preet Vihar",
+    price: 26,
+    availability: "Available",
+    verified: true,
+    distance: 2.4
+  },
+  {
+    name: "Paracetamol 500mg",
+    store: "City Pet Pharmacy",
+    area: "Mayur Vihar",
+    price: 28,
+    availability: "Available",
+    verified: false,
+    distance: 3.5
+  },
+  {
+    name: "Paracetamol 500mg",
+    store: "Sharma Medical Hall",
+    area: "Karol Bagh",
+    price: 34,
+    availability: "Available",
+    verified: true,
+    distance: 6.1
+  },
+  {
+    name: "Paracetamol 500mg",
+    store: "VetCare Store",
+    area: "Saket",
+    price: 40,
+    availability: "Available",
+    verified: true,
+    distance: 9.4
+  },
+
+  // ================= Amoxicillin 250mg =================
+  {
+    name: "Amoxicillin 250mg",
+    store: "Aggarwal Pet Medicos",
+    area: "Rohini",
+    price: 62,
+    availability: "Available",
+    verified: true,
+    distance: 1.8
+  },
+  {
+    name: "Amoxicillin 250mg",
+    store: "Pet Health Pharmacy",
+    area: "Pitampura",
+    price: 68,
+    availability: "Available",
+    verified: true,
+    distance: 3.2
+  },
+  {
+    name: "Amoxicillin 250mg",
+    store: "Friends Vet & Pharma",
+    area: "Janakpuri",
+    price: 75,
+    availability: "Available",
+    verified: false,
+    distance: 6.7
+  },
+  {
+    name: "Amoxicillin 250mg",
+    store: "Apollo Pharmacy",
+    area: "Dwarka",
+    price: 82,
+    availability: "Out of Stock",
+    verified: true,
+    distance: 8.9
+  },
+  {
+    name: "Amoxicillin 250mg",
+    store: "New Gupta Chemist",
+    area: "Uttam Nagar",
+    price: 78,
+    availability: "Available",
+    verified: false,
+    distance: 7.5
+  },
+
+  // ================= Cefpodoxime 100mg =================
+  {
+    name: "Cefpodoxime 100mg",
+    store: "Animal Care Medicos",
+    area: "Hauz Khas",
+    price: 110,
+    availability: "Available",
+    verified: true,
+    distance: 2.1
+  },
+  {
+    name: "Cefpodoxime 100mg",
+    store: "VetPlus Pharmacy",
+    area: "Malviya Nagar",
+    price: 118,
+    availability: "Available",
+    verified: true,
+    distance: 3.6
+  },
+  {
+    name: "Cefpodoxime 100mg",
+    store: "Shree Pet Pharmacy",
+    area: "Lajpat Nagar",
+    price: 125,
+    availability: "Available",
+    verified: false,
+    distance: 5.2
+  },
+  {
+    name: "Cefpodoxime 100mg",
+    store: "Apollo Pharmacy",
+    area: "South Extension",
+    price: 132,
+    availability: "Available",
+    verified: true,
+    distance: 6.4
+  },
+  {
+    name: "Cefpodoxime 100mg",
+    store: "City Vet Medicos",
+    area: "Greater Kailash",
+    price: 140,
+    availability: "Out of Stock",
+    verified: false,
+    distance: 7.8
+  },
+
+  // ================= Metronidazole 400mg =================
+  {
+    name: "Metronidazole 400mg",
+    store: "Om Medical Store",
+    area: "Vikaspuri",
+    price: 45,
+    availability: "Available",
+    verified: true,
+    distance: 2.9
+  },
+  {
+    name: "Metronidazole 400mg",
+    store: "Healthy Paws Pharmacy",
+    area: "Dwarka Mor",
+    price: 52,
+    availability: "Available",
+    verified: false,
+    distance: 4.1
+  },
+  {
+    name: "Metronidazole 400mg",
+    store: "Apollo Pharmacy",
+    area: "Rajouri Garden",
+    price: 58,
+    availability: "Available",
+    verified: true,
+    distance: 5.6
+  },
+  {
+    name: "Metronidazole 400mg",
+    store: "Care & Cure Medicos",
+    area: "Punjabi Bagh",
+    price: 60,
+    availability: "Available",
+    verified: true,
+    distance: 6.8
+  },
+  {
+    name: "Metronidazole 400mg",
+    store: "Local Medicos",
+    area: "Paschim Vihar",
+    price: 55,
+    availability: "Out of Stock",
+    verified: false,
+    distance: 7.3
+  },
+
+  // ================= Calcium Syrup (Pets) =================
+  {
+    name: "Calcium Syrup (Pets)",
+    store: "Pet Nutrition Hub",
+    area: "Rohini",
+    price: 95,
+    availability: "Available",
+    verified: true,
+    distance: 2.0
+  },
+  {
+    name: "Calcium Syrup (Pets)",
+    store: "Healthy Tails Pharmacy",
+    area: "Model Town",
+    price: 105,
+    availability: "Available",
+    verified: false,
+    distance: 4.5
+  },
+  {
+    name: "Calcium Syrup (Pets)",
+    store: "Vet Essentials Store",
+    area: "Civil Lines",
+    price: 112,
+    availability: "Available",
+    verified: true,
+    distance: 5.9
+  },
+  {
+    name: "Calcium Syrup (Pets)",
+    store: "Apollo Pharmacy",
+    area: "Connaught Place",
+    price: 120,
+    availability: "Available",
+    verified: true,
+    distance: 7.1
+  },
+  {
+    name: "Calcium Syrup (Pets)",
+    store: "Paws & Care Medicos",
+    area: "Kashmere Gate",
+    price: 115,
+    availability: "Out of Stock",
+    verified: false,
+    distance: 6.4
+  }
+];
+
+
+
+
+
+function renderMedicines(data = medicines) {
+  const table = document.getElementById("medicineTable");
+  if (!table) return;
+
+  if (data.length === 0) {
+    table.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align:center;color:#999;">
+          No stores found for selected filters
+        </td>
+      </tr>`;
+    return;
+  }
+
+  const cheapestPrice = Math.min(...data.map(m => m.price));
+  const nearestDistance = Math.min(...data.map(m => m.distance));
+
+  table.innerHTML = data.map(m => `
+    <tr>
+      <td>${m.name}</td>
+      <td>${m.store}</td>
+      <td>${m.area}</td>
+      <td style="font-weight:700;color:#1CA7A6">
+        ₹${m.price}
+        ${filtersApplied && m.price === cheapestPrice
+          ? '<span class="price-badge ml-2">Lowest Nearby</span>'
+          : ''
+        }
+        ${filtersApplied && m.distance === nearestDistance
+          ? '<span class="price-badge ml-2">Closest</span>'
+          : ''
+        }
+
+      </td>
+      <td>${m.availability}</td>
+      <td>${m.verified ? '✅ Verified' : '⚠️ Unverified'}</td>
+    </tr>
+  `).join("");
+}
+
+renderMedicines();
+
+
+
+async function generatePassport() {
+  if (!currentUser) {
+    alert("Please login first");
+    return;
+  }
+
+  const petData = {
+    petType: selectedPetType,
+    breed: document.getElementById("petBreed").value,
+    name: document.getElementById("petName").value,
+    age: document.getElementById("petAge").value,
+    allergies: document.getElementById("petAllergies").value || "None",
+    lastCheckup: document.getElementById("petLastCheckup").value || "Not provided"
+  };
+
+  if (!petData.breed || !petData.name) {
+    alert("Please fill all required fields");
+    return;
+  }
+
+  // 🔐 Canonical blockchain data
+  const canonicalData = getCanonicalPassportData(petData);
+
+  // 🔗 Deterministic blockchain hash
+  const blockchainHash =
+    "0x" + btoa(JSON.stringify(canonicalData))
+      .replace(/[^a-zA-Z0-9]/g, "")
+      .slice(0, 32);
+
+  // 📦 CREATE PAYLOAD FIRST (IMPORTANT)
+  const passportPayload = {
+    ...petData,
+    ownerId: currentUser,
+    issuedBy: "VetraChain AI",
+    blockchainHash,
+    immutable: true,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  // 💾 Persist for refresh + verification
+  localStorage.setItem(
+    "vetrachain_passport",
+    JSON.stringify({
+      passportData: passportPayload,
+      blockchainHash
+    })
+  );
+
+  // restore globals
+  window.currentPassportData = passportPayload;
+  window.currentBlockchainHash = blockchainHash;
+
+  // UI → minting animation
+  document.getElementById("passportFormContainer").style.display = "none";
+  document.getElementById("mintingContainer").style.display = "block";
+
+  // 💾 Save to Firestore
+  await db.collection("pet_passports").add(passportPayload);
+
+  // ⏳ Fake mint delay
+  setTimeout(() => {
+    document.getElementById("mintingContainer").style.display = "none";
+    document.getElementById("passportCardContainer").style.display = "block";
+
+    document.getElementById("passportType").innerText = petData.petType;
+    document.getElementById("passportName").innerText = petData.name;
+    document.getElementById("passportBreed").innerText = petData.breed;
+    document.getElementById("passportAge").innerText = petData.age;
+    document.getElementById("passportAllergies").innerText = petData.allergies;
+    document.getElementById("passportCheckup").innerText = petData.lastCheckup;
+
+    document.getElementById("blockchainHashUI").innerText = blockchainHash;
+  }, 1800);
+}
+function simulateTampering() {
+  const stored = localStorage.getItem("vetrachain_passport");
+  if (!stored) {
+    alert("No passport found");
+    return;
+  }
+
+  const data = JSON.parse(stored);
+
+  // 🔥 Modify data (this breaks hash)
+  data.passportData.breed = "Hacked Breed";
+
+  localStorage.setItem("vetrachain_passport", JSON.stringify(data));
+
+  alert("❌ Passport data modified!\nNow click Verify.");
+}
+
+
+
+function showMintingAnimation(petData) {
+  document.getElementById("passportFormContainer").style.display = "none";
+  document.getElementById("mintingContainer").style.display = "block";
+
+  setTimeout(() => {
+    document.getElementById("mintingContainer").style.display = "none";
+    document.getElementById("passportCardContainer").style.display = "block";
+
+    document.getElementById("passportType").innerText = petData.petType;
+    document.getElementById("passportName").innerText = petData.name;
+    document.getElementById("blockchainHashUI").innerText = blockchainHash;
+    document.getElementById("passportBreed").innerText = petData.breed;
+    document.getElementById("passportAge").innerText = petData.age;
+    document.getElementById("passportAllergies").innerText = petData.allergies;
+    document.getElementById("passportCheckup").innerText = petData.lastCheckup;
+
+    generateQRCode();
+  }, 2500);
+}
+
+
+renderMedicines();
+/* ================= CORE NAVIGATION ================= */
+function showSection(section) {
+  document.querySelectorAll('.page-section')
+    .forEach(sec => sec.classList.remove('active'));
+
+  const target = document.getElementById(section + '-section');
+  if (target) target.classList.add('active');
+
+  if (section === "medicine") {
+    renderMedicines(); // 🔥 ensures table always loads
+  }
+ 
+
+}
+
+
+
+function openNGOSection() {
+  showSection('ngo');
+}
+
+function scrollToChat() {
+  openChatbot();
+  document.getElementById('chatInput')?.focus();
+}
+
+/* ================= CHATBOT ================= */
+function openChatbot() {
+  document.getElementById('chatbot')?.classList.remove('hidden');
+  document.getElementById('openChatBtn')?.classList.remove('show');
+}
+let selectedVetForReview = null;
+
+function openReviewModal(vetId) {
+  if (!currentUser) {
+    alert("Please login to leave a review");
+    return;
+  }
+
+  selectedVetForReview = vetId;
+
+  document.getElementById("reviewModal").style.display = "block";
+  loadReviews(vetId);
+}
+
+
+function closeReviewModal() {
+  document.getElementById("reviewModal").style.display = "none";
+}
+async function submitReview() {
+  const user = auth.currentUser;
+
+  if (!user) {
+    alert("Please login to submit a review");
+    return;
+  }
+
+  if (!selectedVetForReview) {
+    alert("No vet selected");
+    return;
+  }
+
+  const rating = Number(
+    document.getElementById("reviewRating").value
+  );
+
+  const comment =
+    document.getElementById("reviewComment").value.trim();
+
+  if (!rating || !comment) {
+    alert("Please add rating and review");
+    return;
+  }
+
+  try {
+    await db.collection("vet_reviews").add({
+      vetId: selectedVetForReview,
+      userId: user.uid,
+      userEmail: user.email,
+      rating: rating,
+      comment: comment,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    alert("✅ Review submitted");
+
+    document.getElementById("reviewComment").value = "";
+    closeReviewModal();
+    loadReviews(selectedVetForReview);
+
+  } catch (err) {
+    console.error(err);
+    alert("❌ Failed to submit review");
+  }
+}
+
+
+
+
+
+
+async function loadReviews(vetId) {
+  const list = document.getElementById("reviewsList");
+  list.innerHTML = "<p>Loading reviews...</p>";
+
+  const snapshot = await db
+    .collection("vet_reviews")
+    .where("vetId", "==", vetId)
+    .orderBy("createdAt", "desc")
+    .get();
+
+  if (snapshot.empty) {
+    list.innerHTML = "<p>No reviews yet</p>";
+    return;
+  }
+
+  list.innerHTML = "";
+
+  snapshot.forEach(doc => {
+    const review = doc.data();
+
+    list.innerHTML += `
+      <div style="margin-bottom:10px;padding:8px;border-bottom:1px solid #eee">
+        <div style="font-weight:600">⭐ ${review.rating}</div>
+        <div style="font-size:13px">${review.comment}</div>
+        <div style="font-size:11px;color:#999">
+          ${review.userEmail || "Anonymous"}
+        </div>
+      </div>
+    `;
+  });
+}
+
+
+
+function closeChatbot() {
+  document.getElementById('chatbot')?.classList.add('hidden');
+  document.getElementById('openChatBtn')?.classList.add('show');
+}
+
+function toggleChatbot() {
+  document.getElementById('chatbot')?.classList.toggle('collapsed');
+}
+
+async function sendMessage() {
+  const input = document.getElementById("chatInput");
+  if (!input.value.trim()) return;
+
+  const userMessage = input.value;
+  addChatMessage(userMessage, "user");
+  input.value = "";
+
+  const prompt = buildAIPrompt(userMessage);
+  const loading = addChatMessage("🤖 VetraAI is thinking...", "bot");
+
+  try {
+    const res = await fetch("/api/ai", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
+    });
+
+    const data = await res.json();
+    loading.textContent = data.reply || "⚠️ No response from AI.";
+  } catch (err) {
+    loading.textContent = "⚠️ AI is unavailable right now.";
+  }
+}
+
+
+
+
+function addChatMessage(text, type) {
+  const div = document.createElement("div");
+  div.className = `chat-message message-${type}`;
+  div.textContent = text;
+  document.getElementById("chatMessages").appendChild(div);
+  return div;
+}
+
+function updateChatMessage(element, newText) {
+  element.textContent = newText;
+}
+
+
+
+
+
+/* ================= LOGIN ================= */
+function openLoginModal() {
+  document.getElementById('loginModal')?.classList.add('active');
+}
+
+function closeLoginModal() {
+  document.getElementById('loginModal')?.classList.remove('active');
+}
+
+
+
+function verifyIntegrity() {
+  const stored = localStorage.getItem("vetrachain_passport");
+  if (!stored) {
+    alert("❌ No blockchain data found");
+    return;
+  }
+
+  const { passportData, blockchainHash } = JSON.parse(stored);
+
+  const canonicalData = getCanonicalPassportData(passportData);
+
+  const recalculatedHash =
+    "0x" + btoa(JSON.stringify(canonicalData))
+      .replace(/[^a-zA-Z0-9]/g, "")
+      .slice(0, 32);
+
+  if (recalculatedHash === blockchainHash) {
+    alert("✅ Blockchain Verified!\nData is immutable.");
+  } else {
+    alert("❌ Tampering Detected!\nHash mismatch.");
+  }
+}
+
+
+function generateQRCode(hash) {
+  const qrBox = document.getElementById("passportQR");
+  if (!qrBox) return;
+
+  qrBox.innerText = "🔗 Blockchain Hash:\n" + hash;
+}
+
+
+
+
+/* ================= LOCATION ================= */
+function openLocationModal() {
+  document.getElementById('locationModal')?.classList.add('active');
+}
+
+function closeLocationModal() {
+  document.getElementById('locationModal')?.classList.remove('active');
+}
+
+      // 🔧 Expose functions to HTML onclick handlers
+    window.toggleChatbot = toggleChatbot;
+    window.closeChatbot = closeChatbot;
+    window.openNGOSection = openNGOSection;
+    window.showSection = showSection;
+    window.openLocationModal = openLocationModal;
+    window.openChatbot = openChatbot;
+    window.scrollToChat = scrollToChat;
+    window.loginWithHiveKeychain = loginWithHiveKeychain;
+    window.logoutUser = logoutUser;
+
+    </script>
+    <script>
+        function fetchVetsByLocation(location) {
+          const vetGrid = document.getElementById("vetGrid");
+
+          if (!vetGrid) {
+            console.error("vetGrid not found");
+            return;
+          }
+
+          vetGrid.innerHTML = "🔍 Loading nearby vets...";
+
+          db.collection("vets")
+            .where("area", "==", location)
+            .get()
+            .then(snapshot => {
+              console.log("Vets found:", snapshot.size);
+
+              if (snapshot.empty) {
+                vetGrid.innerHTML = `❌ No vets found in ${location}`;
+                return;
+              }
+
+              vetGrid.innerHTML = "";
+
+              snapshot.forEach(doc => {
+                const vet = doc.data();
+                const vetId = doc.id;   // ✅ THIS WAS MISSING
+
+
+                vetGrid.innerHTML += `
+                  <div class="vet-card">
+                    <div class="vet-header">
+                      <div class="vet-name">${vet.name}</div>
+                      <div class="vet-rating">⭐ ${vet.rating}</div>
+                    </div>
+
+                    <div class="vet-area">${vet.clinicName}</div>
+
+                    <div class="vet-spec">
+                      🧑‍⚕️ ${vet.experience || "10+"} yrs experience
+                    </div>
+
+                    <div class="vet-badge">
+                      ${vet.openNow ? "🟢 Open Now" : "🔴 Closed"}
+                    </div>
+
+                    <div style="margin:10px 0;font-weight:600;">
+                      💰 ₹${vet.consultationFee}
+                    </div>
+
+                    <div style="font-size:13px;color:#666;margin-bottom:10px;">
+                      📍 ${vet.address}
+                    </div>
+
+                    <button class="vet-button">
+                      📞 Book / Contact
+                    </button>
+                    <button
+                      onclick="openReviewModal('${vetId}')"
+                      style="
+                        margin-top:10px;
+                        width:100%;
+                        padding:10px;
+                        background:#f1f5f9;
+                        border-radius:8px;
+                        font-size:14px;
+                      ">
+                      ⭐ View / Add Reviews
+                    </button>
+
+                  </div>
+        `       ;
+              });
+            })
+            .catch(err => {
+              console.error("Vet fetch error:", err);
+              vetGrid.innerHTML = "⚠️ Error loading vets";
+            });
+        }
+        </script>
+
+   <!-- Zapier AI Chatbot -->
+    <script async type="module"
+      src="https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js">
+    </script>
+    
+
+    <zapier-interfaces-chatbot-embed
+      is-popup="true"
+      chatbot-id="cmlo6riii002q7gfqvoata5qy">
+    </zapier-interfaces-chatbot-embed>
+  <div id="aiInlineContainer" style="display:none;">
+  <zapier-interfaces-chatbot-embed
+    id="zapierChatbot"
+    chatbot-id="cmlo6riii002q7gfqvoata5qy"
+    is-popup="false"
+    height="600px"
+    width="100%">
+  </zapier-interfaces-chatbot-embed>
+</div>
+  
+  <div id="reviewModal"
+     style="
+     display:none;
+     position:fixed;
+     inset:0;
+     background:rgba(0,0,0,0.4);
+     z-index:9999;
+     ">
+
+  <div style="
+       background:white;
+       width:350px;
+       margin:80px auto;
+       padding:20px;
+       border-radius:10px;
+       ">
+
+    <h3 style="font-weight:600;margin-bottom:10px">
+      Leave a Review
+    </h3>
+
+    <select id="reviewRating"
+            style="width:100%;padding:8px;margin-bottom:10px">
+      <option value="5">⭐⭐⭐⭐⭐</option>
+      <option value="4">⭐⭐⭐⭐</option>
+      <option value="3">⭐⭐⭐</option>
+      <option value="2">⭐⭐</option>
+      <option value="1">⭐</option>
+    </select>
+
+    <textarea id="reviewComment"
+              placeholder="Your experience"
+              style="width:100%;padding:8px;height:80px;margin-bottom:10px"></textarea>
+
+    <button onclick="submitReview()"
+            style="width:100%;padding:10px;background:#14b8a6;color:white;border-radius:8px">
+      Submit Review
+    </button>
+
+    <button onclick="closeReviewModal()"
+            style="width:100%;margin-top:8px;font-size:12px">
+      Cancel
+    </button>
+
+    <hr style="margin:15px 0">
+
+    <div id="reviewsList"></div>
+  </div>
+</div>
+
+  </body>
+
+</html>
