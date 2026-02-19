@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VetraChain – NGO Support</title>
+
+<!-- Tailwind (optional, safe) -->
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+
+<style>
+/* ========== GLOBAL ========== */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(135deg,#E3F2FD,#B3E5FC);
+    color: #0D47A1;
+}
+.section {
+    max-width: 1200px;
+    margin: auto;
+    padding: 80px 20px;
+}
+.section-title {
+    font-size: 36px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 50px;
+    color: #0277BD;
+}
+button {
+    cursor: pointer;
+}
+
+/* ========== NGO CARDS ========== */
+.ngo-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap: 30px;
+}
+.ngo-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 10px 35px rgba(2,119,189,.1);
+    transition: .3s;
+}
+.ngo-card:hover {
+    transform: translateY(-10px);
+    border: 2px solid #0277BD;
+}
+.ngo-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+.ngo-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0277BD;
+}
+.ngo-desc {
+    font-size: 14px;
+    color: #666;
+    margin: 15px 0 20px;
+}
+.ngo-button {
+    background: linear-gradient(135deg,#0277BD,#00BCD4);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+/* ========== MODALS ========== */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+.modal.active {
+    display: flex;
+}
+.modal-box {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 30px 60px rgba(0,0,0,.2);
+    animation: slideIn .3s ease;
+}
+@keyframes slideIn {
+    from {transform: translateY(-40px); opacity:0;}
+    to {transform: translateY(0); opacity:1;}
+}
+.close-btn {
+    float: right;
+    font-size: 26px;
+    border: none;
+    background: none;
+}
+
+/* ========== DONATION ========== */
+.ngo-donation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+    gap: 25px;
+}
+.ngo-donation-card {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 10px 35px rgba(2,119,189,.1);
+}
+.ngo-donate-btn {
+    margin-top: 15px;
+    width: 100%;
+    background: linear-gradient(135deg,#0277BD,#00BCD4);
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+/* ========== NOTIFICATION ========== */
+.notification {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg,#0277BD,#00BCD4);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    z-index: 5000;
+}
+</style>
+</head>
+
+<body>
+
+<section class="section">
+    <h2 class="section-title">🐕 Stray Animal Support & NGOs</h2>
+    <div id="ngoCardsContainer" class="ngo-cards"></div>
+</section>
+
+
+
+<!-- NGO VERIFICATION -->
+<div class="modal" id="ngoVerificationModal">
+    <div class="modal-box">
+        <button class="close-btn" onclick="closeModal('ngoVerificationModal')">×</button>
+        <h2 class="section-title">📋 NGO Registration</h2>
+        <form onsubmit="submitNGOForm(event)">
+            <input required placeholder="Person Name" /><br/><br/>
+            <input required placeholder="NGO Name" /><br/><br/>
+            <input required placeholder="NGO License" /><br/><br/>
+            <input type="date" required /><br/><br/>
+            <input required placeholder="Location" /><br/><br/>
+            <button class="ngo-button">Verify NGO</button>
+        </form>
+    </div>
+</div>
+
+<!-- NGO VERIFIED -->
+<div class="modal" id="ngoVerifiedModal">
+    <div class="modal-box">
+        <h2 class="section-title">✅ NGO Verified</h2>
+        <p>Your NGO Hash ID:</p>
+        <h1 id="ngoHash" style="letter-spacing:3px;"></h1>
+        <button class="ngo-button" onclick="enterNGODashboard()">Continue</button>
+    </div>
+</div>
+
+<!-- DONATION LIST -->
+<div class="modal" id="donationModal">
+    <div class="modal-box" style="max-width:800px;">
+        <button class="close-btn" onclick="closeModal('donationModal')">×</button>
+        <h2 class="section-title">💰 Donate to NGOs</h2>
+        <div id="donationGrid" class="ngo-donation-grid"></div>
+    </div>
+</div>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+<script>
+
+const role = localStorage.getItem("vetrachain_role");
+let currentUser = null;
+
+
+
+
+
+
+
+
+
+/* ========== STATE ========== */
+const firebaseConfig = {
+  apiKey: "AIzaSyDytWfShqS-GzkqwlrQ-fEERu73AZSFJL0",
+  authDomain: "vetrachain-7721f.firebaseapp.com",
+  projectId: "vetrachain-7721f",
+  storageBucket: "vetrachain-7721f.firebasestorage.app",
+  messagingSenderId: "467179815416",
+  appId: "1:467179815416:web:c17c4d2c6a9b31c525160d"
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+const auth = firebase.auth();
+
+
+let userRole = null;
+let ngoHash = null;
+
+/* ========== DATA ========== */
+const ngoList = [
+    {name:"People For Animals", icon:"🐾", desc:"India’s largest animal welfare NGO"},
+    {name:"Friendicoes SECA", icon:"🐶", desc:"Rescue & shelter services"},
+    {name:"SGACC", icon:"🏥", desc:"Delhi animal care centre"},
+    {name:"Blue Cross", icon:"🚑", desc:"Emergency rescue NGO"}
+];
+
+/* ========== INIT ========== */
+
+
+
+/* ========== ROLE LOGIC ========== */
+
+
+let authReady = false;
+
+
+
+
+
+function selectRole(role) {
+  userRole = role;
+  closeModal("roleModal");
+
+  if (role === "ngo") {
+    openModal("ngoVerificationModal");
+  } else {
+    renderHOOMAN();
+  }
+}
+
+
+/* ========== NGO FLOW ========== */
+function submitNGOForm(e){
+    e.preventDefault();
+    ngoHash = Math.random().toString(36).substring(2,7).toUpperCase();
+    document.getElementById("ngoHash").innerText = ngoHash;
+    closeModal("ngoVerificationModal");
+    openModal("ngoVerifiedModal");
+}
+
+function enterNGODashboard(){
+    closeModal("ngoVerifiedModal");
+    renderNGO();
+    notify("✅ NGO dashboard activated");
+}
+
+/* ========== RENDERING ========== */
+function renderNGO(){
+    document.getElementById("ngoCardsContainer").innerHTML = `
+        <div class="ngo-card">
+            <div class="ngo-icon">📋</div>
+            <div class="ngo-title">Register Rescued Pet</div>
+            <div class="ngo-desc">Create medical record</div>
+            <button class="ngo-button">Start</button>
+        </div>
+        <div class="ngo-card">
+            <div class="ngo-icon">🏥</div>
+            <div class="ngo-title">Track Treatment</div>
+            <div class="ngo-desc">Monitor recovery</div>
+            <button class="ngo-button">View</button>
+        </div>
+        <div class="ngo-card">
+            <div class="ngo-icon">🎖️</div>
+            <div class="ngo-title">Adoption Badge</div>
+            <div class="ngo-desc">Mark animals adoption-ready</div>
+            <button class="ngo-button">Manage</button>
+        </div>
+    `;
+}
+
+function renderHOOMAN(){
+    document.getElementById("ngoCardsContainer").innerHTML = `
+        <div class="ngo-card">
+            <div class="ngo-icon">🏠</div>
+            <div class="ngo-title">Adoption Ready Pets</div>
+            <div class="ngo-desc">Browse animals</div>
+            <button class="ngo-button">Browse</button>
+        </div>
+        <div class="ngo-card">
+            <div class="ngo-icon">💰</div>
+            <div class="ngo-title">Donate</div>
+            <div class="ngo-desc">Support rescue NGOs</div>
+            <button class="ngo-button" onclick="openDonation()">Donate</button>
+        </div>
+    `;
+}
+
+
+
+
+
+
+/* ========== DONATIONS ========== */
+function openDonation(){
+    const grid = document.getElementById("donationGrid");
+    grid.innerHTML = ngoList.map(n=>`
+        <div class="ngo-donation-card">
+            <div style="font-size:40px">${n.icon}</div>
+            <h3>${n.name}</h3>
+            <p>${n.desc}</p>
+            <button class="ngo-donate-btn" onclick="notify('✅ Donation initiated')">
+                Donate via UPI
+            </button>
+        </div>
+    `).join("");
+    openModal("donationModal");
+}
+
+/* ========== HELPERS ========== */
+function openModal(id){ document.getElementById(id).classList.add("active"); }
+function closeModal(id){ document.getElementById(id).classList.remove("active"); }
+
+function notify(msg){
+    const n=document.createElement("div");
+    n.className="notification";
+    n.innerText=msg;
+    document.body.appendChild(n);
+    setTimeout(()=>n.remove(),3000);
+}
+</script>
+
+</body>
+</html>
