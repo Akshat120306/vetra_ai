@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hooman Dashboard - VetraChain</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .ngo-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .ngo-card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 10px 35px rgba(2,119,189,0.1);
+      transition: 0.3s;
+    }
+
+    .ngo-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .ngo-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+
+    .ngo-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0277BD;
+    }
+
+    .ngo-desc {
+      font-size: 14px;
+      color: #666;
+      margin: 10px 0 20px;
+    }
+
+    .ngo-button {
+      background: linear-gradient(135deg,#0277BD,#00BCD4);
+      color: white;
+      padding: 12px 25px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .role-switch-banner {
+      margin: 20px;
+    }
+
+    .role-switch-banner button {
+      padding: 10px 20px;
+      border-radius: 20px;
+      border: 2px solid #0277BD;
+      background: white;
+      color: #0277BD;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50">
+
+<!-- Navbar -->
+<div class="bg-teal-500 text-white p-4 flex justify-between">
+  <h1 class="text-xl font-bold">🐾 VetraChain</h1>
+  <button onclick="logout()" class="bg-white text-teal-500 px-3 py-1 rounded">
+    Logout
+  </button>
+</div>
+
+<!-- Switch -->
+<div class="role-switch-banner">
+  <button onclick="switchRole()">↩️ Switch to NGO</button>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboardContainer" class="ngo-cards"></div>
+
+<script>
+
+function renderHooman() {
+  document.getElementById("dashboardContainer").innerHTML = `
+    
+    <div class="ngo-card">
+        <div class="ngo-icon">🏠</div>
+        <div class="ngo-title">Adoption Ready</div>
+        <div class="ngo-desc">Browse adoption pets</div>
+        <button class="ngo-button" onclick="openAdopt()">Browse</button>
+    </div>
+
+    <div class="ngo-card">
+        <div class="ngo-icon">💰</div>
+        <div class="ngo-title">Transparent Donations</div>
+        <div class="ngo-desc">Support NGOs</div>
+        <button class="ngo-button" onclick="openDonationModal()">Donate Now</button>
+    </div>
+  `;
+}
+
+function switchRole() {
+  if (localStorage.getItem("ngoID")) {
+    window.location.href = "ngo.html";
+  } else {
+    window.location.href = "ngo-register.html";
+  }
+}
+
+function logout() {
+  localStorage.clear();
+  window.location.href = "index.html";
+}
+function openAdopt() {
+  window.location.href = "hooman-adopt.html";
+}
+renderHooman();
+
+</script>
+<script>
+
+function openDonationModal() {
+  document.getElementById("donationModal").classList.remove("hidden");
+}
+
+function closeDonationModal() {
+  document.getElementById("donationModal").classList.add("hidden");
+}
+
+function openPayment(name) {
+  document.getElementById("ngoName").innerText = name;
+  document.getElementById("donationModal").classList.add("hidden");
+  document.getElementById("paymentModal").classList.remove("hidden");
+}
+
+function closePayment() {
+  document.getElementById("paymentModal").classList.add("hidden");
+}
+
+function openQR() {
+  document.getElementById("qrNgo").innerText =
+    document.getElementById("ngoName").innerText;
+
+  document.getElementById("paymentModal").classList.add("hidden");
+  document.getElementById("qrModal").classList.remove("hidden");
+}
+
+function closeQR() {
+  document.getElementById("qrModal").classList.add("hidden");
+}
+
+function donationDone() {
+  alert("🎉 Donation Successful!");
+  closeQR();
+}
+
+</script>
+<!-- DONATION MODAL -->
+<div id="donationModal" class="fixed inset-0 bg-black bg-opacity-40 hidden flex items-center justify-center z-50">
+
+  <div class="bg-white w-[90%] max-w-4xl p-6 rounded-2xl relative">
+
+    <button onclick="closeDonationModal()" class="absolute right-4 top-4 text-xl">✖</button>
+
+    <h2 class="text-2xl font-bold text-center mb-2">💰 Support Animal Rescue NGOs</h2>
+    <p class="text-center text-gray-500 mb-6">
+      Choose an NGO and make a transparent donation
+    </p>
+
+    <div class="grid md:grid-cols-2 gap-6">
+
+      <!-- NGO CARD -->
+      <div class="bg-gray-50 p-5 rounded-xl shadow text-center">
+        <div class="text-4xl mb-2">🐾</div>
+        <h3 class="font-bold text-lg">Friendicoes SECA</h3>
+        <p class="text-sm text-gray-500 mb-4">
+          Delhi NGO for rescue & treatment
+        </p>
+
+        <button onclick="openPayment('Friendicoes SECA')"
+          class="bg-gradient-to-r from-blue-600 to-cyan-400 text-white px-4 py-2 rounded-lg w-full">
+          💝 Donate Now
+        </button>
+      </div>
+
+      <!-- NGO CARD -->
+      <div class="bg-gray-50 p-5 rounded-xl shadow text-center">
+        <div class="text-4xl mb-2">🐶</div>
+        <h3 class="font-bold text-lg">People for Animals</h3>
+        <p class="text-sm text-gray-500 mb-4">
+          One of India’s largest animal org
+        </p>
+
+        <button onclick="openPayment('PFA')"
+          class="bg-gradient-to-r from-blue-600 to-cyan-400 text-white px-4 py-2 rounded-lg w-full">
+          💝 Donate Now
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-40 hidden flex items-center justify-center z-50">
+
+  <div class="bg-white w-[90%] max-w-md p-6 rounded-2xl relative text-center">
+
+    <button onclick="closePayment()" class="absolute right-4 top-4 text-xl">✖</button>
+
+    <h2 id="ngoName" class="text-xl font-bold mb-2"></h2>
+    <p class="text-gray-500 mb-6">Select payment method</p>
+
+    <button onclick="openQR()"
+      class="w-full border-2 border-blue-400 p-3 rounded-xl mb-3">
+      📱 UPI Payment (Scan QR)
+    </button>
+
+    <button class="w-full border-2 border-gray-300 p-3 rounded-xl mb-3">
+      🔗 HIVE Token
+    </button>
+
+    <button class="w-full border-2 border-gray-300 p-3 rounded-xl">
+      💵 USDT (Tron)
+    </button>
+
+  </div>
+</div>
+
+<!-- QR MODAL -->
+<div id="qrModal" class="fixed inset-0 bg-black bg-opacity-40 hidden flex items-center justify-center z-50">
+
+  <div class="bg-white w-[90%] max-w-md p-6 rounded-2xl text-center relative">
+
+    <button onclick="closeQR()" class="absolute right-4 top-4 text-xl">✖</button>
+
+    <h2 id="qrNgo" class="text-xl font-bold mb-2"></h2>
+    <p class="text-gray-500 mb-4">Scan to Donate via UPI</p>
+
+    <div class="bg-blue-100 p-4 rounded-xl mb-4">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=vetrachain@upi"
+        class="mx-auto rounded-lg"/>
+      <p class="mt-2 text-sm">UPI: vetrachain@upi</p>
+    </div>
+
+    <button onclick="donationDone()"
+      class="bg-gradient-to-r from-blue-600 to-cyan-400 text-white w-full py-3 rounded-xl">
+      ✅ Donation Sent
+    </button>
+
+  </div>
+</div>
+</body>
+</html>

@@ -512,7 +512,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.12);
           ">
             <zapier-interfaces-chatbot-embed
-              chatbot-id="cmlo6riii002q7gfqvoata5qy"
+              chatbot-id="cmnok04hp002ekx57p9ewd3kk"
               is-popup="false"
               height="600px"
               width="100%">
@@ -1838,13 +1838,15 @@ function closeRoleModal() {
 }
 
 function selectUserRole(role) {
-  // store role temporarily
   localStorage.setItem("vetrachain_role", role);
 
   closeRoleModal();
 
-  // ✅ NOW navigate
-  window.location.href = "ngo.html";
+  if (role === "ngo") {
+    window.location.href = "ngo-register.html";
+  } else {
+    window.location.href = "hooman.html";
+  }
 }
 
 renderMedicines();
@@ -2214,12 +2216,12 @@ function closeLocationModal() {
 
     <zapier-interfaces-chatbot-embed
       is-popup="true"
-      chatbot-id="cmlo6riii002q7gfqvoata5qy">
+      chatbot-id="cmnok04hp002ekx57p9ewd3kk">
     </zapier-interfaces-chatbot-embed>
   <div id="aiInlineContainer" style="display:none;">
   <zapier-interfaces-chatbot-embed
     id="zapierChatbot"
-    chatbot-id="cmlo6riii002q7gfqvoata5qy"
+    chatbot-id="cmnok04hp002ekx57p9ewd3kk"
     is-popup="false"
     height="600px"
     width="100%">

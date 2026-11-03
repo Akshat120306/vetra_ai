@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Adoption Ready - VetraChain</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+
+<body class="bg-gray-50">
+
+<!-- Navbar -->
+<div class="bg-teal-500 text-white p-4 flex justify-between">
+  <h1 class="text-xl font-bold">🐾 Adoption Ready</h1>
+  <button onclick="goBack()" class="bg-white text-teal-500 px-3 py-1 rounded">
+    Back
+  </button>
+</div>
+
+<div class="p-6">
+  <h2 class="text-2xl font-bold mb-4">Healthy Pets (Ready for Adoption)</h2>
+
+  <div id="petList" class="grid md:grid-cols-3 gap-4"></div>
+</div>
+
+<script>
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDyt...",
+  authDomain: "vetrachain-7721f.firebaseapp.com",
+  projectId: "vetrachain-7721f"
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
+
+async function loadHealthyPets() {
+
+  const container = document.getElementById("petList");
+  container.innerHTML = "Loading...";
+
+  const ngoID = localStorage.getItem("ngoID");
+
+  const snapshot = await db.collection("rescued_pets")
+    .where("ngoID", "==", ngoID)
+    .where("condition", "==", "Healthy")
+    .get();
+
+  if (snapshot.empty) {
+    container.innerHTML = "No healthy pets available";
+    return;
+  }
+
+  container.innerHTML = "";
+
+  snapshot.forEach(doc => {
+    const pet = doc.data();
+
+    container.innerHTML += `
+      <div class="bg-white p-4 rounded shadow">
+
+        <h3 class="text-lg font-bold">${pet.name}</h3>
+        <p class="text-sm text-gray-600">${pet.type} • ${pet.breed || "Unknown"}</p>
+
+        <p class="mt-2 text-green-600 font-semibold">✅ Healthy</p>
+
+        <input id="fee-${doc.id}"
+          class="w-full mt-2 p-2 border rounded"
+          placeholder="Adoption Fee ₹" />
+
+        <input id="location-${doc.id}"
+          class="w-full mt-2 p-2 border rounded"
+          placeholder="Location" />
+
+        <input id="contact-${doc.id}"
+          class="w-full mt-2 p-2 border rounded"
+          placeholder="Contact Number" />
+
+        <button onclick="markAdoption('${doc.id}')"
+          class="mt-3 w-full bg-green-500 text-white py-2 rounded">
+          Mark Adoption Ready
+        </button>
+
+      </div>
+    `;
+  });
+}
+
+async function markAdoption(id) {
+
+  const fee = document.getElementById(`fee-${id}`).value;
+  const location = document.getElementById(`location-${id}`).value;
+  const contact = document.getElementById(`contact-${id}`).value;
+
+  if (!fee || !location || !contact) {
+    alert("Fill all adoption details");
+    return;
+  }
+
+  try {
+    await db.collection("rescued_pets").doc(id).update({
+      adoptionReady: true,
+      adoptionFee: fee,
+      adoptionLocation: location,
+      adoptionContact: contact,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    alert("🎉 Marked as Adoption Ready!");
+    loadHealthyPets();
+
+  } catch (err) {
+    console.error(err);
+    alert("Error updating");
+  }
+}
+
+function goBack() {
+  window.location.href = "ngo.html";
+}
+
+loadHealthyPets();
+
+</script>
+
+</body>
+</html>

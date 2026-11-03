@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register Rescued Pet - VetraChain</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+</head>
+
+<body class="bg-gray-50">
+
+<!-- Navbar -->
+<div class="bg-teal-500 text-white p-4 flex justify-between">
+  <h1 class="text-xl font-bold">🐾 Register Rescue</h1>
+  <button onclick="goBack()" class="bg-white text-teal-500 px-3 py-1 rounded">
+    Back
+  </button>
+</div>
+
+<!-- FORM -->
+<div class="max-w-xl mx-auto mt-10 bg-white p-6 rounded shadow">
+
+  <h2 class="text-xl font-bold mb-4">Rescued Animal Details</h2>
+
+  <input id="name" type="text" placeholder="Pet Name (optional)"
+    class="w-full mb-3 p-2 border rounded">
+
+  <select id="type" class="w-full mb-3 p-2 border rounded">
+    <option value="">Select Type</option>
+    <option>Dog</option>
+    <option>Cat</option>
+  </select>
+
+  <input id="breed" type="text" placeholder="Breed"
+    class="w-full mb-3 p-2 border rounded">
+
+  <input id="age" type="number" placeholder="Approx Age"
+    class="w-full mb-3 p-2 border rounded">
+
+  <select id="condition" class="w-full mb-3 p-2 border rounded">
+    <option value="">Health Condition</option>
+    <option>Critical</option>
+    <option>Injured</option>
+    <option>Recovering</option>
+    <option>Healthy</option>
+  </select>
+
+  <textarea id="notes" placeholder="Additional Notes"
+    class="w-full mb-3 p-2 border rounded"></textarea>
+
+  <button onclick="savePet()"
+    class="w-full bg-teal-500 text-white py-2 rounded">
+    Register Pet
+  </button>
+
+</div>
+
+<script>
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDyt...",
+  authDomain: "vetrachain-7721f.firebaseapp.com",
+  projectId: "vetrachain-7721f"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+async function savePet() {
+
+  const type = document.getElementById("type").value;
+  const condition = document.getElementById("condition").value;
+
+  if (!type || !condition) {
+    alert("Fill required fields");
+    return;
+  }
+
+  const petData = {
+    name: document.getElementById("name").value || "Unnamed",
+    type: type,
+    breed: document.getElementById("breed").value,
+    age: document.getElementById("age").value,
+    condition: condition,
+    notes: document.getElementById("notes").value,
+    
+    // 🔥 IMPORTANT LINK TO NGO
+    ngoID: localStorage.getItem("ngoID"),
+
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  try {
+    await db.collection("rescued_pets").add(petData);
+
+    alert("✅ Pet saved to database");
+
+    window.location.href = "ngo.html";
+
+  } catch (err) {
+    console.error(err);
+    alert("❌ Error saving pet");
+  }
+}
+
+function goBack() {
+  window.location.href = "ngo.html";
+}
+
+</script>
+
+</body>
+</html>

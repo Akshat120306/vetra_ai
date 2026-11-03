@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NGO Registration - VetraChain</title>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  width: 400px;
+}
+
+.btn {
+  background: linear-gradient(135deg,#0277BD,#00BCD4);
+  color: white;
+  padding: 12px;
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+</style>
+</head>
+
+<body class="bg-gray-100">
+
+<!-- FORM -->
+<div class="modal" id="formModal">
+  <div class="box">
+    <h2 class="text-xl font-bold mb-4">📋 NGO Registration</h2>
+
+    <input id="name" placeholder="Your Name" class="w-full p-2 border rounded mb-3">
+    <input id="ngo" placeholder="NGO Name" class="w-full p-2 border rounded mb-3">
+    <input id="license" placeholder="License ID" class="w-full p-2 border rounded mb-3">
+    <input id="date" type="date" class="w-full p-2 border rounded mb-3">
+    <input id="location" placeholder="Location" class="w-full p-2 border rounded mb-3">
+
+    <button class="btn" onclick="startVerification()"> Verify NGO</button>
+    <button class="btn bg-white text-black-500 border" onclick="goBack()"> Back To Home</button>
+  </div>
+</div>
+
+<!-- VERIFY -->
+<div class="modal hidden" id="verifyModal">
+  <div class="box text-center">
+    <h2 class="text-xl font-bold mb-4">🤖 Verifying...</h2>
+    <p>Checking NGO details...</p>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="modal hidden" id="successModal">
+  <div class="box text-center">
+    <h2 class="text-xl font-bold mb-4">✅ NGO Verified!</h2>
+
+    <p>Your NGO ID:</p>
+    <h3 id="ngoId" class="text-2xl font-bold mb-4"></h3>
+
+    <button class="btn" onclick="goDashboard()">Continue</button>
+    <button class="btn bg-white text-black-500 border" onclick="goHooman()">Switch to HOOMAN</button>
+  </div>
+</div>
+
+<script>
+
+function startVerification() {
+
+  const name = document.getElementById("name").value.trim();
+  const ngo = document.getElementById("ngo").value.trim();
+  const license = document.getElementById("license").value.trim();
+  const date = document.getElementById("date").value;
+  const location = document.getElementById("location").value.trim();
+
+  // ❌ Validation
+  if (!name || !ngo || !license || !date || !location) {
+    alert("Please fill all NGO details properly");
+    return;
+  }
+
+  // OPTIONAL: stricter validation
+  if (license.length < 5) {
+    alert("Enter valid NGO License ID");
+    return;
+  }
+
+  // ✅ Continue if valid
+  document.getElementById("formModal").classList.add("hidden");
+  document.getElementById("verifyModal").classList.remove("hidden");
+
+  setTimeout(() => {
+    document.getElementById("verifyModal").classList.add("hidden");
+    document.getElementById("successModal").classList.remove("hidden");
+
+    const id = generateID();
+    document.getElementById("ngoId").innerText = id;
+
+    localStorage.setItem("ngoID", id);
+
+  }, 2000);
+}
+
+function generateID() {
+  return Math.random().toString(36).substring(2,7).toUpperCase();
+}
+
+function goDashboard() {
+  window.location.href = "ngo.html";
+}
+
+function goHooman() {
+  window.location.href = "hooman.html";
+}
+
+function goBack() {
+  window.location.href = "index.html";
+}
+
+</script>
+
+</body>
+</html>

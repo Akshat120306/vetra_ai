@@ -1,0 +1,3012 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VetraChain – AI Pet Healthcare for Delhi</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="/_sdk/element_sdk.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hive-keychain@latest/lib/hive_keychain.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #E3F2FD 0%, #B3E5FC 50%, #81D4FA 100%);
+            color: #0D47A1;
+            min-height: 100vh;
+        }
+
+        /* Loading Page Styles */
+        .loading-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #E3F2FD 0%, #B3E5FC 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.8s ease-out;
+        }
+
+        .loading-container.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .paw-logo {
+            font-size: 80px;
+            margin-bottom: 30px;
+            animation: pulse-paw 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-paw {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        .heartbeat-line {
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, #0277BD, #0097A7);
+            margin: 20px 0;
+            position: relative;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .heartbeat-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, #4DD0E1, transparent);
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        .loading-text {
+            font-size: 32px;
+            font-weight: bold;
+            color: #0277BD;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .loading-subtext {
+            font-size: 14px;
+            color: #0D47A1;
+            margin-top: 10px;
+            opacity: 0.7;
+        }
+
+        .bone-loader {
+            width: 150px;
+            height: 20px;
+            background: #B3E5FC;
+            border-radius: 20px;
+            margin-top: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bone-loader::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 30%;
+            background: linear-gradient(90deg, #0277BD, #00BCD4);
+            border-radius: 20px;
+            animation: load 2s ease-in-out infinite;
+        }
+
+        @keyframes load {
+            0% {
+                width: 0%;
+            }
+
+            50% {
+                width: 100%;
+            }
+
+            100% {
+                width: 100%;
+            }
+        }
+
+        /* Sticky Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #B3E5FC;
+            padding: 1rem 2rem;
+            width: 100%;
+        }
+
+        .navbar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #0277BD;
+            cursor: pointer;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .navbar-links a {
+            text-decoration: none;
+            color: #0D47A1;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .navbar-links a:hover {
+            color: #0277BD;
+        }
+
+        .navbar-btn {
+            background: linear-gradient(135deg, #0277BD, #00BCD4);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #0277BD;
+            font-weight: 600;
+        }
+
+        /* Page Sections */
+        .page-section {
+            display: none;
+            margin-top: 70px;
+            width: 100%;
+            min-height: calc(100% - 70px);
+            overflow-y: auto;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #E3F2FD 0%, #B3E5FC 50%, #81D4FA 100%);
+            padding: 80px 2rem;
+            text-align: center;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #4DD0E1 0%, transparent 70%);
+            opacity: 0.2;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #00BCD4 0%, transparent 70%);
+            opacity: 0.15;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(30px);
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+        }
+
+        .pet-images-showcase {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .pet-image-card {
+            font-size: 80px;
+            animation: bounce 2s ease-in-out infinite;
+            filter: drop-shadow(0 10px 20px rgba(2, 119, 189, 0.2));
+        }
+
+        .pet-image-card:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .pet-image-card:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .pet-image-card:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .hero-headline {
+            font-size: 52px;
+            font-weight: 800;
+            color: #0277BD;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-subheading {
+            font-size: 20px;
+            color: #0D47A1;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0277BD, #00BCD4);
+            color: white;
+            padding: 15px 35px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(2, 119, 189, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(2, 119, 189, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #0277BD;
+            padding: 15px 35px;
+            border: 2px solid #0277BD;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #0277BD;
+            color: white;
+        }
+
+        /* Sections */
+        .section {
+            padding: 80px 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: 40px;
+            font-weight: 800;
+            color: #0277BD;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        /* Open Chat Button */
+        .open-chat-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 500;
+            background: linear-gradient(135deg, #0277BD, #00BCD4);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(2, 119, 189, 0.3);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .open-chat-button.show {
+            display: flex;
+        }
+
+        .open-chat-button:hover {
+            transform: scale(1.1);
+        }
+
+        /* AI Chatbot */
+        .chatbot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 500;
+            width: 380px;
+            max-width: 90vw;
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 20px 60px rgba(2, 119, 189, 0.2);
+            overflow: hidden;
+            animation: slideUp 0.5s ease-out;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(400px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .chatbot-container.hidden {
+            display: none !important;
+        }
+
+        .chatbot-container.collapsed {
+            width: 60px;
+            height: 60px;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, #0277BD, #00BCD4);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            min-height: 60px;
+        }
+
+        .chatbot-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .chatbot-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chatbot-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chatbot-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chatbot-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .chatbot-body {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .chatbot-container.collapsed .chatbot-body {
+            display: none;
+        }
+
+        .chatbot-container.collapsed .chatbot-footer {
+            display: none;
+        }
+
+        .chat-message {
+            padding: 12px 16px;
+            border-radius: 15px;
+            max-width: 85%;
+            word-wrap: break-word;
+            font-size: 14px;
+            line-height: 1.4;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #0277BD, #00BCD4);
+            color: white;
+        }
+
+        .message-bot {
+            align-self: flex-start;
+            background: #E3F2FD;
+            color: #0D47A1;
+        }
+
+        .chatbot-footer {
+            padding: 15px;
+            border-top: 1px solid #E0E0E0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #B3E5FC;
+            border-radius: 20px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input:focus {
+            border-color: #0277BD;
+        }
+
+        .chat-send {
+            background: linear-gradient(135deg, #0277BD, #00BCD4);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .chat-send:hover {
+            transform: scale(1.1);
+        }
+
+        /* Vet Cards */
+        .vet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .vet-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 35px rgba(2, 119, 189, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid rgba(2, 119, 189, 0.1);
+        }
+
+        .vet-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(2, 119, 189, 0.2);
+        }
+
+        .vet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .vet-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0277BD;
+        }
+
+        .vet-rating {
+            background: linear-gradient(135deg, #0277BD, #00BCD4);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .vet-area {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .vet-spec {
+            font-size: 14px;
+            color: #0D47A1;
+            margin-bottom: 15px;
+            padding: 8px 12px;
+            background: #E3F2FD;
+            border-radius: 8px;
+        }
+
+        .vet-badge {
+            display: inline-block;
+            background: #B3E5FC;
+            color: #0277BD;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .vet-button {
+            width: 100%;
+            background: linear-gradient(135deg, #0277BD, #00BCD4);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .vet-button:hover {
+            transform: scale(1.02);
+        }
+
+        /* Medicine Comparison Table */
+        .medicine-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 35px rgba(2, 119, 189, 0.08);
+            margin-top: 50px;
+        }
+
+        .medicine-table thead {
+            background: linear-gradient(135deg, #0277BD, #00BCD4);
+            color: white;
+        }
+
+        .medicine-table th {
+            padding: 18px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .medicine-table td {
+            padding: 18px;
+            border-bottom: 1px solid #E3F2FD;
+        }
+
+        .medicine-table tbody tr:hover {
+            background: #E3F2FD;
+        }
+
+        .price-badge {
+            background: #B3E5FC;
+            color: #0277BD;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Pet Type Selection */
+        .pet-type-btn {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #B3E5FC;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #0D47A1;
+            transition: all 0.3s ease;
+        }
+
+        .pet-type-btn:hover {
+            border-color: #0277BD;
+            background: #E3F2FD;
+        }
+
+        .pet-type-selected {
+            background: linear-gradient(135deg, #0277BD, #00BCD4);
+            color: white;
+            border-color: #0277BD;
+        }
+
+        /* Pet Passport */
+        .passport-card {
+            background: linear-gradient(135deg, #0277BD, #00BCD4);
+            color: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(2, 119, 189, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: slideInPassport 0.6s ease-out;
+        }
+
+        @keyframes slideInPassport {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .passport-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 400px;
+            height: 400px;
+            background: repeating-linear-gradient(60deg,
+                    transparent,
+                    transparent 20px,
+                    rgba(255, 255, 255, 0.1) 20px,
+                    rgba(255, 255, 255, 0.1) 40px);
+            animation: hexagon-rotate 20s linear infinite;
+        }
+
+        @keyframes hexagon-rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .passport-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .passport-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 30px;
+        }
+
+        .passport-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .passport-label {
+            opacity: 0.8;
+        }
+
+        .passport-value {
+            font-weight: 600;
+        }
+
+        .passport-qr {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 10px;
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            color: #0277BD;
+            font-weight: 600;
+        }
+
+        /* NGO Cards */
+        .ngo-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .ngo-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 35px rgba(2, 119, 189, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .ngo-card:hover {
+            border-color: #0277BD;
+            transform: translateY(-10px);
+        }
+
+        .ngo-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .ngo-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0277BD;
+            margin-bottom: 15px;
+        }
+
+        .ngo-desc {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .ngo-button {
+            background: linear-gradient(135deg, #0277BD, #00BCD4);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .ngo-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Login Modal */
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .login-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .login-box {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .login-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #0277BD;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .login-subtitle {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .hive-button {
+            width: 100%;
+            background: linear-gradient(135deg, #0277BD, #00BCD4);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .hive-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(2, 119, 189, 0.3);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            float: right;
+            margin-bottom: 20px;
+        }
+
+        /* Location Modal */
+        .location-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .location-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .location-box {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.3s ease;
+        }
+
+        .location-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0277BD;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .location-subtitle {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .location-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .location-button {
+            background: white;
+            border: 2px solid #B3E5FC;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #0D47A1;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .location-button:hover {
+            border-color: #0277BD;
+            background: #E3F2FD;
+            transform: translateY(-2px);
+        }
+
+        .location-button.selected {
+            background: linear-gradient(135deg, #0277BD, #00BCD4);
+            color: white;
+            border-color: #0277BD;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            float: right;
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #0D47A1, #0277BD);
+            color: white;
+            padding: 60px 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .footer-text {
+            opacity: 0.9;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+        }
+
+        .footer-links a:hover {
+            opacity: 0.7;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 30px;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-links {
+                gap: 1rem;
+                font-size: 12px;
+            }
+
+            .hero-headline {
+                font-size: 36px;
+            }
+
+            .hero-subheading {
+                font-size: 16px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+            }
+
+            .chatbot-container {
+                width: 95vw;
+                height: 500px;
+                bottom: 10px;
+                right: 10px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .vet-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .location-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pet-images-showcase {
+                gap: 15px;
+            }
+
+            .pet-image-card {
+                font-size: 60px;
+            }
+        }
+
+        .scrollable-content {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes loading-progress {
+            0% {
+                width: 0%;
+            }
+
+            100% {
+                width: 100%;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes mintBounce {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .role-switch-banner {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .role-switch-banner button {
+            background: white;
+            color: #0277BD;
+            border: 2px solid #0277BD;
+            padding: 12px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .role-switch-banner button:hover {
+            background: #E3F2FD;
+            transform: translateY(-2px);
+        }
+
+        /* NGO Donation List */
+        .ngo-donation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .ngo-donation-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 35px rgba(2, 119, 189, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .ngo-donation-card:hover {
+            border-color: #0277BD;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(2, 119, 189, 0.2);
+        }
+
+        .ngo-donation-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .ngo-donation-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0277BD;
+            margin-bottom: 12px;
+        }
+
+        .ngo-donation-info {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .ngo-donate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #0277BD, #00BCD4);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .ngo-donate-btn:hover {
+            transform: scale(1.02);
+        }
+
+        /* Donation Payment Modal */
+        .payment-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3001;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .payment-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .payment-box {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.3s ease;
+        }
+
+        .payment-header {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0277BD;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .payment-subheader {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .payment-option-btn {
+            background: white;
+            border: 2px solid #B3E5FC;
+            padding: 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #0D47A1;
+            transition: all 0.3s ease;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .payment-option-btn:hover {
+            border-color: #0277BD;
+            background: #E3F2FD;
+            transform: translateX(5px);
+        }
+
+        .payment-option-icon {
+            font-size: 24px;
+        }
+
+        /* QR Code Display */
+        .qr-container {
+            background: #E3F2FD;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .qr-code-placeholder {
+            width: 250px;
+            height: 250px;
+            background: white;
+            border: 2px solid #B3E5FC;
+            border-radius: 12px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+        }
+
+        .qr-info {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        /* Insufficient Balance */
+        .insufficient-balance {
+            background: #FFEBEE;
+            border: 2px solid #EF5350;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .insufficient-balance-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #EF5350;
+            margin-bottom: 10px;
+        }
+
+        .insufficient-balance-text {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="scrollable-content">
+        <!-- Loading Page -->
+        <div class="loading-container" id="loadingPage">
+            <div class="paw-logo">🐾</div>
+            <div class="heartbeat-line"></div>
+            <div class="loading-text" id="brandName">VetraChain</div>
+            <div class="loading-subtext">Smarter Healthcare for Delhi's Pets</div>
+            <div class="bone-loader"></div>
+        </div>
+        <!-- Login Modal -->
+        <div class="login-modal" id="loginModal">
+            <div class="login-box">
+                <button class="close-modal" onclick="closeLoginModal()">×</button>
+                <div class="login-title">🐾 VetraChain</div>
+                <div class="login-subtitle">Login with Hive Keychain to Access Your Pet Healthcare</div>
+                <button class="hive-button" onclick="loginWithHiveKeychain()">
+                    🔐 Login with Hive Keychain
+                </button>
+                <p style="text-align: center; font-size: 12px; color: #999; margin-top: 20px;">
+                    Secure blockchain-based authentication via Hive Keychain
+                </p>
+            </div>
+        </div>
+        <!-- Role Selection Modal -->
+        <div class="login-modal" id="roleModal">
+            <div class="login-box">
+                <div class="login-title">🤝 Who Are You?</div>
+                <div class="login-subtitle">Select your role to access relevant features</div>
+                <button class="hive-button" onclick="selectRole('ngo')" style="margin-top: 20px;">
+                    🏢 I'm an NGO
+                </button>
+                <button class="hive-button" onclick="selectRole('hooman')"
+                    style="background: linear-gradient(135deg, #00897B, #00BCD4); margin-bottom: 15px;">
+                    👤 I'm a HOOMAN (Supporter)
+                </button>
+                <p style="text-align: center; font-size: 12px; color: #999; margin-top: 20px;">
+                    NGOs: Register, track rescued pets, and manage donations<br />
+                    HOOMANs: Browse adoptions and support rescues
+                </p>
+            </div>
+        </div>
+        <!-- NGO Verification Modal -->
+        <div class="login-modal" id="ngoVerificationModal">
+            <div class="login-box" style="max-width: 600px;">
+                <button class="close-modal" onclick="closeNGOVerification()">×</button>
+                <div class="login-title">📋 NGO Registration</div>
+                <div class="login-subtitle">Fill in your organization details</div>
+                <form onsubmit="submitNGOForm(event)">
+                    <!-- Person Name -->
+                    <div style="margin-bottom: 20px;">
+                        <label for="personName"
+                            style="display: block; font-weight: 600; color: #0D47A1; margin-bottom: 8px;">👤 Name of
+                            Person</label>
+                        <input type="text" id="personName" placeholder="Full Name" required
+                            style="width: 100%; padding: 12px 15px; border: 2px solid #B3E5FC; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+                            onfocus="this.style.borderColor='#0277BD'" onblur="this.style.borderColor='#B3E5FC'" />
+                    </div>
+                    <!-- NGO Name -->
+                    <div style="margin-bottom: 20px;">
+                        <label for="ngoName"
+                            style="display: block; font-weight: 600; color: #0D47A1; margin-bottom: 8px;">🏢 Name of
+                            NGO</label>
+                        <input type="text" id="ngoName" placeholder="Organization Name" required
+                            style="width: 100%; padding: 12px 15px; border: 2px solid #B3E5FC; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+                            onfocus="this.style.borderColor='#0277BD'" onblur="this.style.borderColor='#B3E5FC'" />
+                    </div>
+                    <!-- NGO License -->
+                    <div style="margin-bottom: 20px;">
+                        <label for="ngoLicense"
+                            style="display: block; font-weight: 600; color: #0D47A1; margin-bottom: 8px;">📜 NGO
+                            Registered License</label>
+                        <input type="text" id="ngoLicense" placeholder="e.g., NGO/2024/12345" required
+                            style="width: 100%; padding: 12px 15px; border: 2px solid #B3E5FC; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+                            onfocus="this.style.borderColor='#0277BD'" onblur="this.style.borderColor='#B3E5FC'" />
+                    </div>
+                    <!-- Registration Date -->
+                    <div style="margin-bottom: 20px;">
+                        <label for="registrationDate"
+                            style="display: block; font-weight: 600; color: #0D47A1; margin-bottom: 8px;">📅 Registered
+                            Date</label>
+                        <input type="date" id="registrationDate" required
+                            style="width: 100%; padding: 12px 15px; border: 2px solid #B3E5FC; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+                            onfocus="this.style.borderColor='#0277BD'" onblur="this.style.borderColor='#B3E5FC'" />
+                    </div>
+                    <!-- Location -->
+                    <div style="margin-bottom: 20px;">
+                        <label for="ngoLocation"
+                            style="display: block; font-weight: 600; color: #0D47A1; margin-bottom: 8px;">📍 Location of
+                            NGO</label>
+                        <input type="text" id="ngoLocation" placeholder="e.g., Rohini, Delhi" required
+                            style="width: 100%; padding: 12px 15px; border: 2px solid #B3E5FC; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+                            onfocus="this.style.borderColor='#0277BD'" onblur="this.style.borderColor='#B3E5FC'" />
+                    </div>
+                    <button type="submit" class="hive-button" style="width: 100%; margin-top: 10px;">
+                        ✅ Verify NGO Details
+                    </button>
+                    <button type="button" onclick="switchRole()"
+                        style="width: 100%; background: white; color: #0277BD; border: 2px solid #0277BD; margin-top: 10px; padding: 12px 15px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                        ↩️ Switch to HOOMAN
+                    </button>
+                </form>
+            </div>
+        </div>
+        <!-- NGO Verification Animation -->
+        <div class="login-modal" id="ngoVerifyingModal" style="display: none; z-index: 3001;">
+            <div class="login-box" style="text-align: center;">
+                <div style="font-size: 80px; animation: pulse 1.5s ease-in-out infinite; margin-bottom: 30px;">🤖</div>
+                <h2 style="font-size: 24px; font-weight: 800; color: #0277BD; margin-bottom: 15px;">🔍 AI Verifying
+                    Details</h2>
+                <p style="color: #666; font-size: 14px; margin-bottom: 30px;">Analyzing your NGO registration
+                    information...</p>
+                <div style="background: #E3F2FD; border-radius: 12px; padding: 20px; margin-bottom: 30px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <span id="verifyStep1"
+                            style="width: 30px; height: 30px; background: linear-gradient(135deg, #0277BD, #00BCD4); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: 600; animation: pulse 1s ease-in-out infinite;">⏳</span>
+                        <span style="color: #0D47A1;">Validating NGO license...</span>
+                    </div>
+                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <span id="verifyStep2"
+                            style="width: 30px; height: 30px; background: #B3E5FC; color: #0277BD; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: 600;">2</span>
+                        <span style="color: #999;">Checking registration date...</span>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <span id="verifyStep3"
+                            style="width: 30px; height: 30px; background: #B3E5FC; color: #0277BD; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: 600;">3</span>
+                        <span style="color: #999;">Generating NGO Hash ID...</span>
+                    </div>
+                </div>
+                <div style="background: #B3E5FC; height: 6px; border-radius: 10px; overflow: hidden;">
+                    <div
+                        style="height: 100%; background: linear-gradient(90deg, #0277BD, #00BCD4); width: 0%; animation: loading-progress 6s ease-out forwards; border-radius: 10px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- NGO Verified Success Modal -->
+        <div class="login-modal" id="ngoVerifiedModal" style="display: none; z-index: 3002;">
+            <div class="login-box" style="text-align: center;">
+                <div style="font-size: 80px; margin-bottom: 20px; animation: slideInUp 0.5s ease;">✅</div>
+                <h2 style="font-size: 28px; font-weight: 800; color: #0277BD; margin-bottom: 15px;">NGO Verified!</h2>
+                <p style="color: #666; font-size: 16px; margin-bottom: 30px;">Your organization has been successfully
+                    verified on VetraChain</p>
+                <div
+                    style="background: #E3F2FD; border: 2px solid #0277BD; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                    <div
+                        style="font-size: 12px; color: #999; margin-bottom: 8px; text-transform: uppercase; font-weight: 600;">
+                        NGO Hash ID</div>
+                    <div style="font-size: 20px; font-weight: 800; color: #0277BD; margin-bottom: 15px; font-family: monospace; letter-spacing: 2px;"
+                        id="ngoHashDisplay">--</div>
+                    <button onclick="copyNGOHash()"
+                        style="width: 100%; background: linear-gradient(135deg, #0277BD, #00BCD4); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;"
+                        onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">📋
+                        Copy NGO Hash ID</button>
+                </div>
+                <button onclick="closeNGOVerifiedModal()"
+                    style="width: 100%; background: linear-gradient(135deg, #0277BD, #00BCD4); color: white; padding: 15px; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 16px; transition: all 0.3s ease; margin-bottom: 10px;"
+                    onmouseover="this.style.transform='translateY(-2px)'"
+                    onmouseout="this.style.transform='translateY(0)'">
+                    Continue to Dashboard
+                </button>
+                <button onclick="switchToHOOMANMode()"
+                    style="width: 100%; background: white; color: #0277BD; border: 2px solid #0277BD; padding: 12px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease;"
+                    onmouseover="this.style.background='#E3F2FD'" onmouseout="this.style.background='white'">
+                    ↩️ Switch to HOOMAN Mode
+                </button>
+            </div>
+        </div>
+        <!-- NGO Donation List Modal -->
+        <div class="login-modal" id="ngoDonationListModal">
+            <div
+                style="background: white; border-radius: 20px; padding: 40px; max-width: 1000px; max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2); animation: slideIn 0.3s ease;">
+                <button class="close-modal" onclick="closeNGODonationList()" style="margin-bottom: 20px;">×</button>
+                <h2 style="font-size: 32px; font-weight: 800; color: #0277BD; margin-bottom: 15px; text-align: center;">
+                    💰 Support Animal Rescue NGOs</h2>
+                <p style="color: #666; font-size: 15px; text-align: center; margin-bottom: 40px;">Choose an NGO and make
+                    a transparent donation to help rescue and rehabilitate animals</p>
+                <div class="ngo-donation-grid" id="ngoDonationGrid">
+                    <!-- NGO cards will be populated here -->
+                </div>
+            </div>
+        </div>
+        <!-- Payment Modal -->
+        <div class="payment-modal" id="paymentModal">
+            <div class="payment-box">
+                <button class="close-modal" onclick="closePaymentModal()">×</button>
+                <div class="payment-header" id="paymentNGOName">People for Animals (PFA)</div>
+                <div class="payment-subheader">Select your preferred payment method</div>
+                <div class="payment-options">
+                    <button class="payment-option-btn" onclick="selectPaymentMethod('upi')">
+                        <span class="payment-option-icon">📱</span>
+                        <span>UPI Payment (Scan QR)</span>
+                    </button>
+                    <button class="payment-option-btn" onclick="selectPaymentMethod('hive')">
+                        <span class="payment-option-icon">🔗</span>
+                        <span>HIVE Token</span>
+                    </button>
+                    <button class="payment-option-btn" onclick="selectPaymentMethod('usdt')">
+                        <span class="payment-option-icon">💵</span>
+                        <span>USDT (Tron Network)</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- UPI QR Code Modal -->
+        <div class="payment-modal" id="upiQRModal">
+            <div class="payment-box" style="text-align: center;">
+                <button class="close-modal" onclick="closeUPIQR()">×</button>
+                <div class="payment-header" id="upiNGOName">People for Animals (PFA)</div>
+                <div class="payment-subheader" style="margin-bottom: 25px;">Scan to Donate via UPI</div>
+                <div class="qr-container">
+                    <div class="qr-code-placeholder" id="qrCodePlaceholder">📲</div>
+                    <div class="qr-info">
+                        <p style="font-weight: 600; margin-bottom: 5px;">UPI: vvetrachain@upi</p>
+                        <p style="color: #999; font-size: 12px;">Account Name: VetraChain NGO Support</p>
+                    </div>
+                </div>
+                <p style="color: #666; font-size: 13px; margin-bottom: 20px; line-height: 1.6;">
+                    📸 Scan the QR code with your mobile phone's camera or UPI app to send your donation. Your
+                    contribution will be verified and sent directly to the NGO.
+                </p>
+                <button onclick="confirmUPIDonation()"
+                    style="width: 100%; background: linear-gradient(135deg, #0277BD, #00BCD4); color: white; padding: 15px; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 16px; transition: all 0.3s ease;"
+                    onmouseover="this.style.transform='translateY(-2px)'"
+                    onmouseout="this.style.transform='translateY(0)'">
+                    ✅ Donation Sent
+                </button>
+            </div>
+        </div>
+        <!-- Insufficient Balance Modal -->
+        <div class="payment-modal" id="insufficientBalanceModal">
+            <div class="payment-box" style="text-align: center;">
+                <div style="font-size: 80px; margin-bottom: 20px;">⚠️</div>
+                <h2 style="font-size: 28px; font-weight: 800; color: #EF5350; margin-bottom: 15px;">Insufficient Balance
+                </h2>
+                <p style="color: #666; font-size: 16px; margin-bottom: 30px;">You don't have enough <span
+                        id="insufficientTokenName">HIVE</span> tokens in your wallet to complete this donation.</p>
+                <div
+                    style="background: #FFEBEE; border-radius: 12px; padding: 20px; margin-bottom: 30px; text-align: left;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="color: #666;">Current Balance:</span>
+                        <span style="font-weight: 700; color: #EF5350;">0 <span id="balanceTokenName">HIVE</span></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: #666;">Try Alternative:</span>
+                        <span style="font-weight: 600; color: #0277BD; cursor: pointer;" onclick="switchToUPI()">💱
+                            Switch to UPI</span>
+                    </div>
+                </div>
+                <button onclick="closeInsufficientBalance()"
+                    style="width: 100%; background: linear-gradient(135deg, #0277BD, #00BCD4); color: white; padding: 15px; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 16px; transition: all 0.3s ease;">
+                    Go Back
+                </button>
+            </div>
+        </div>
+        <!-- Location Modal (Add this if missing) -->
+        <div class="location-modal" id="locationModal">
+            <div class="location-box">
+                <button class="modal-close" onclick="closeLocationModal()">×</button>
+                <div class="location-title">📍 Select Your Location</div>
+                <div class="location-subtitle">Choose your area to find nearby vets</div>
+                <div class="location-grid">
+                    <button class="location-button" onclick="selectLocation('Rohini')">Rohini</button>
+                    <button class="location-button" onclick="selectLocation('Saket')">Saket</button>
+                    <button class="location-button" onclick="selectLocation('Pitampura')">Pitampura</button>
+                    <button class="location-button" onclick="selectLocation('Dwarka')">Dwarka</button>
+                    <button class="location-button" onclick="selectLocation('Janakpuri')">Janakpuri</button>
+                    <button class="location-button" onclick="selectLocation('Hauz Khas')">Hauz Khas</button>
+                    <button class="location-button" onclick="selectLocation('Karol Bagh')">Karol Bagh</button>
+                    <button class="location-button" onclick="selectLocation('Greater Kailash')">Greater Kailash</button>
+                </div>
+            </div>
+        </div>
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="navbar-content">
+                <div class="navbar-brand" onclick="showSection('home')">
+                    🐾 <span id="navBrandName">VetraChain</span>
+                </div>
+                <ul class="navbar-links">
+                    <li><a onclick="showSection('home')">Home</a></li>
+                    <li><a onclick="openLocationModal()">🏥 Find Vets</a></li>
+                    <li><a onclick="showSection('medicine')">💊 Medicines</a></li>
+                    <li><a onclick="showSection('passport')">🆔 Pet Passport</a></li>
+                    <li><a onclick="openNGOSection()">🐕 NGOs</a></li>
+                    <li>
+                        <div class="user-info" id="userInfo" style="display: none;">
+                            <span id="username">User</span>
+                            <button class="navbar-btn" onclick="logoutUser()">Logout</button>
+                        </div>
+                        <button class="navbar-btn" id="loginBtn" onclick="openLoginModal()">Login</button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Home Section -->
+        <div class="page-section active" id="home-section">
+            <section class="hero" id="home">
+                <div class="hero-content">
+                    <div class="pet-images-showcase">
+                        <div class="pet-image-card">🐕</div>
+                        <div class="pet-image-card">❤️</div>
+                        <div class="pet-image-card">🐱</div>
+                    </div>
+                    <h1 class="hero-headline" id="heroHeadline">AI-Powered Healthcare for Dogs & Cats in Delhi</h1>
+                    <p class="hero-subheading" id="heroSubheading">Compare prices. Discover trusted vets. Get instant
+                        pet health guidance.</p>
+                    <div class="hero-buttons">
+                        <button class="btn-primary" onclick="scrollToChat()">💬 Talk to AI Assistant</button>
+                        <button class="btn-secondary" onclick="openLocationModal()">🔍 Find Nearby Vet</button>
+                    </div>
+                </div>
+            </section>
+            <footer class="footer">
+                <div class="footer-content">
+                    <div class="footer-title">🐾 VetraChain</div>
+                    <p class="footer-text">AI-Powered Pet Healthcare Platform for Delhi with Hive Blockchain Integration
+                    </p>
+                    <div class="footer-links">
+                        <a onclick="showSection('home')">About</a>
+                        <a onclick="openLocationModal()">Find Vets</a>
+                        <a onclick="showSection('medicine')">Compare Medicines</a>
+                        <a onclick="openNGOSection()">Support NGOs</a>
+                        <a onclick="scrollToChat()">Contact</a>
+                    </div>
+                    <div class="footer-bottom">
+                        <p>&copy; 2024 VetraChain. All rights reserved. Revolutionizing Pet Healthcare in Delhi with
+                            Hive Blockchain.</p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        <!-- Vets Section -->
+        <div class="page-section" id="vets-section">
+            <section class="section">
+                <h2 class="section-title" id="vetsTitle">🏥 Top Rated Vets in Selected Area</h2>
+                <div class="vet-grid" id="vetGrid">
+                    <!-- Vet cards will be dynamically generated -->
+                </div>
+            </section>
+            <footer class="footer">
+                <div class="footer-content">
+                    <div class="footer-title">🐾 VetraChain</div>
+                    <p class="footer-text">AI-Powered Pet Healthcare Platform for Delhi with Hive Blockchain Integration
+                    </p>
+                </div>
+            </footer>
+        </div>
+        <!-- Medicine Comparison Section -->
+        <div class="page-section" id="medicine-section">
+            <section class="section">
+                <h2 class="section-title">💊 Medicine Price Comparison</h2>
+                <table class="medicine-table">
+                    <thead>
+                        <tr>
+                            <th>Medicine</th>
+                            <th>Store</th>
+                            <th>Area</th>
+                            <th>Price</th>
+                            <th>Availability</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="medicineTable">
+                        <!-- Medicine rows will be generated -->
+                    </tbody>
+                </table>
+            </section>
+            <footer class="footer">
+                <div class="footer-content">
+                    <div class="footer-title">🐾 VetraChain</div>
+                    <p class="footer-text">AI-Powered Pet Healthcare Platform for Delhi with Hive Blockchain Integration
+                    </p>
+                </div>
+            </footer>
+        </div>
+        <!-- Pet Passport Section -->
+        <div class="page-section" id="passport-section">
+            <section class="section">
+                <h2 class="section-title">🆔 Digital Pet Health Passport</h2>
+                <!-- Login Required Container -->
+                <div id="passportLoginContainer"
+                    style="max-width: 600px; margin: 0 auto; text-align: center; padding: 60px 20px;">
+                    <div style="font-size: 80px; margin-bottom: 30px;">🔐</div>
+                    <h3 style="font-size: 24px; font-weight: 700; color: #0277BD; margin-bottom: 15px;">Login Required
+                    </h3>
+                    <p style="color: #666; font-size: 16px; margin-bottom: 30px;">You need to be logged in to create
+                        your pet's digital passport. This ensures your pet's health records are secure and personalized.
+                    </p>
+                    <button class="btn-primary" onclick="openLoginModal()"
+                        style="padding: 15px 35px; font-size: 16px;">🔐 Login with Hive Keychain</button>
+                </div>
+                <!-- Form Container -->
+                <div id="passportFormContainer" style="max-width: 600px; margin: 0 auto; display: none;">
+                    <div
+                        style="background: white; border-radius: 20px; padding: 40px; box-shadow: 0 10px 35px rgba(2, 119, 189, 0.08);">
+                        <h3
+                            style="font-size: 20px; font-weight: 700; color: #0277BD; margin-bottom: 30px; text-align: center;">
+                            Create Your Pet's Passport</h3>
+                        <!-- Pet Type Selection -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #0D47A1; margin-bottom: 12px;">🐾
+                                What type of pet?</label>
+                            <div style="display: flex; gap: 15px;">
+                                <button class="pet-type-btn pet-type-selected" id="petTypeDog"
+                                    onclick="selectPetType('dog')">🐕 Dog</button>
+                                <button class="pet-type-btn" id="petTypeCat" onclick="selectPetType('cat')">🐱
+                                    Cat</button>
+                            </div>
+                        </div>
+                        <!-- Breed Input -->
+                        <div style="margin-bottom: 25px;">
+                            <label for="petBreed"
+                                style="display: block; font-weight: 600; color: #0D47A1; margin-bottom: 8px;">Breed</label>
+                            <input type="text" id="petBreed" placeholder="e.g., Labrador Retriever, Persian Cat"
+                                style="width: 100%; padding: 12px 15px; border: 2px solid #B3E5FC; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+                                onfocus="this.style.borderColor='#0277BD'" onblur="this.style.borderColor='#B3E5FC'" />
+                        </div>
+                        <!-- Pet Name Input -->
+                        <div style="margin-bottom: 25px;">
+                            <label for="petName"
+                                style="display: block; font-weight: 600; color: #0D47A1; margin-bottom: 8px;">Pet
+                                Name</label>
+                            <input type="text" id="petName" placeholder="e.g., Bruno, Whiskers"
+                                style="width: 100%; padding: 12px 15px; border: 2px solid #B3E5FC; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+                                onfocus="this.style.borderColor='#0277BD'" onblur="this.style.borderColor='#B3E5FC'" />
+                        </div>
+                        <!-- Age Input -->
+                        <div style="margin-bottom: 25px;">
+                            <label for="petAge"
+                                style="display: block; font-weight: 600; color: #0D47A1; margin-bottom: 8px;">Age
+                                (years)</label>
+                            <input type="number" id="petAge" placeholder="e.g., 3" min="0" max="30"
+                                style="width: 100%; padding: 12px 15px; border: 2px solid #B3E5FC; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+                                onfocus="this.style.borderColor='#0277BD'" onblur="this.style.borderColor='#B3E5FC'" />
+                        </div>
+                        <!-- Allergies Input -->
+                        <div style="margin-bottom: 25px;">
+                            <label for="petAllergies"
+                                style="display: block; font-weight: 600; color: #0D47A1; margin-bottom: 8px;">Allergies
+                                (if any)</label>
+                            <input type="text" id="petAllergies"
+                                placeholder="e.g., Chicken, Dairy - Leave blank if none"
+                                style="width: 100%; padding: 12px 15px; border: 2px solid #B3E5FC; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+                                onfocus="this.style.borderColor='#0277BD'" onblur="this.style.borderColor='#B3E5FC'" />
+                        </div>
+                        <!-- Last Checkup Input -->
+                        <div style="margin-bottom: 30px;">
+                            <label for="petLastCheckup"
+                                style="display: block; font-weight: 600; color: #0D47A1; margin-bottom: 8px;">Last
+                                Checkup (Clinic & Date)</label>
+                            <input type="text" id="petLastCheckup" placeholder="e.g., Rohini Clinic - 15 Jan"
+                                style="width: 100%; padding: 12px 15px; border: 2px solid #B3E5FC; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.3s ease;"
+                                onfocus="this.style.borderColor='#0277BD'" onblur="this.style.borderColor='#B3E5FC'" />
+                        </div>
+                        <!-- Create Button -->
+                        <button class="btn-primary" onclick="generatePassport()"
+                            style="width: 100%; padding: 15px; font-size: 16px;">Create My Pet Passport ✨</button>
+                    </div>
+                </div>
+                <!-- Minting Animation Container -->
+                <div id="mintingContainer"
+                    style="display: none; text-align: center; max-width: 600px; margin: 0 auto; padding: 60px 20px;">
+                    <div style="font-size: 80px; animation: mintBounce 1.5s ease-in-out infinite; margin-bottom: 30px;">
+                        🔐</div>
+                    <h3 style="font-size: 24px; font-weight: 700; color: #0277BD; margin-bottom: 15px;">Minting Your Pet
+                        Passport</h3>
+                    <p style="color: #666; font-size: 16px; margin-bottom: 40px;">Creating a blockchain-secure digital
+                        identity for your beloved pet...</p>
+                    <!-- Animated Progress Bar -->
+                    <div
+                        style="background: #B3E5FC; height: 8px; border-radius: 10px; overflow: hidden; margin-bottom: 20px;">
+                        <div id="mintProgress"
+                            style="height: 100%; background: linear-gradient(90deg, #0277BD, #00BCD4); width: 0%; border-radius: 10px; animation: mintProgress 3s ease-out forwards;">
+                        </div>
+                    </div>
+                    <!-- Minting Steps -->
+                    <div id="mintingSteps"
+                        style="text-align: left; background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                            <span id="step1"
+                                style="width: 30px; height: 30px; background: linear-gradient(135deg, #0277BD, #00BCD4); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: 600;">✓</span>
+                            <span style="color: #0D47A1;">Registering pet information...</span>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                            <span id="step2"
+                                style="width: 30px; height: 30px; background: #B3E5FC; color: #0277BD; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: 600;">2</span>
+                            <span style="color: #999;">Creating health record...</span>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <span id="step3"
+                                style="width: 30px; height: 30px; background: #B3E5FC; color: #0277BD; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: 600;">3</span>
+                            <span style="color: #999;">Minting on blockchain...</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Passport Card Display -->
+                <div id="passportCardContainer" style="display: none; max-width: 600px; margin: 0 auto;">
+                    <div class="passport-card">
+                        <div class="passport-content">
+                            <div class="passport-title" id="passportTitle">🐕 Pet's Health Passport</div>
+                            <div class="passport-row">
+                                <span class="passport-label">Pet Type:</span>
+                                <span class="passport-value" id="passportType">Dog</span>
+                            </div>
+                            <div class="passport-row">
+                                <span class="passport-label">Pet Name:</span>
+                                <span class="passport-value" id="passportName">--</span>
+                            </div>
+                            <div class="passport-row">
+                                <span class="passport-label">Breed:</span>
+                                <span class="passport-value" id="passportBreed">--</span>
+                            </div>
+                            <div class="passport-row">
+                                <span class="passport-label">Age:</span>
+                                <span class="passport-value" id="passportAge">--</span>
+                            </div>
+                            <div class="passport-row">
+                                <span class="passport-label">Vaccination Status:</span>
+                                <span class="passport-value">✓ Up to Date</span>
+                            </div>
+                            <div class="passport-row">
+                                <span class="passport-label">Allergies:</span>
+                                <span class="passport-value" id="passportAllergies">None</span>
+                            </div>
+                            <div class="passport-row">
+                                <span class="passport-label">Last Checkup:</span>
+                                <span class="passport-value" id="passportCheckup">--</span>
+                            </div>
+                            <div class="passport-qr">📱 QR Code Minted</div>
+                            <button class="btn-secondary" onclick="resetPassportForm()"
+                                style="width: 100%; margin-top: 20px; background: white; color: #0277BD; border: 2px solid #0277BD; padding: 12px;">Create
+                                Another Passport</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <footer class="footer">
+                <div class="footer-content">
+                    <div class="footer-title">🐾 VetraChain</div>
+                    <p class="footer-text">AI-Powered Pet Healthcare Platform for Delhi with Hive Blockchain Integration
+                    </p>
+                </div>
+            </footer>
+        </div>
+        <!-- NGO Support Section -->
+        <div class="page-section" id="ngo-section">
+            <section class="section">
+                <h2 class="section-title">🐕 Stray Animal Support & Adoption</h2>
+                <div id="ngoCardsContainer" class="ngo-cards">
+                    <!-- Cards will be dynamically rendered based on role -->
+                </div>
+            </section>
+            <footer class="footer">
+                <div class="footer-content">
+                    <div class="footer-title">🐾 VetraChain</div>
+                    <p class="footer-text">AI-Powered Pet Healthcare Platform for Delhi with Hive Blockchain Integration
+                    </p>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <!-- Open Chat Button -->
+    <button class="open-chat-button" id="openChatBtn" onclick="openChatbot()" title="Open Chat">💬</button>
+    <!-- AI Chatbot -->
+    <div class="chatbot-container" id="chatbot">
+        <div class="chatbot-header">
+            <div class="chatbot-title">🤖 VetraAI Assistant</div>
+            <div class="chatbot-controls">
+                <button class="chatbot-toggle" id="toggleBtn" onclick="toggleChatbot()">−</button>
+                <button class="chatbot-close" id="closeBtn" onclick="closeChatbot()">×</button>
+            </div>
+        </div>
+        <div class="chatbot-body" id="chatMessages">
+            <div class="chat-message message-bot">
+                👋 Hi! I'm VetraAI. How can I help your pet today?
+            </div>
+        </div>
+        <div class="chatbot-footer">
+            <input type="text" class="chat-input" id="chatInput"
+                placeholder="Ask about pet health, vets, or medicines..." />
+            <button class="chat-send" onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+    <script>
+        const config = {
+            brand_name: 'VetraChain',
+            hero_headline: 'AI-Powered Healthcare for Dogs & Cats in Delhi',
+            hero_subheading: 'Compare prices. Discover trusted vets. Get instant pet health guidance.',
+            ai_assistant_title: 'VetraAI – Your Pet Health Companion'
+        };
+
+        const defaultConfig = {
+            brand_name: 'VetraChain',
+            hero_headline: 'AI-Powered Healthcare for Dogs & Cats in Delhi',
+            hero_subheading: 'Compare prices. Discover trusted vets. Get instant pet health guidance.',
+            ai_assistant_title: 'VetraAI – Your Pet Health Companion'
+        };
+
+        let currentUser = null;
+        let currentWalletAddress = null;
+        let selectedLocation = null;
+        let selectedPetType = 'dog';
+        let userRole = null;
+        let ngoData = null;
+        let currentNGOHash = null;
+        let selectedNGOForDonation = null;
+        let selectedPaymentMethod = null;
+
+        // NGO Database
+        const ngoDonationList = [
+            { id: 1, name: 'People for Animals (PFA)', icon: '🐾', desc: 'One of India\'s largest animal welfare organisations, rescuing, treating and sheltering animals across Delhi & India.' },
+            { id: 2, name: 'Friendicoes SECA', icon: '🐶', desc: 'A well-known Delhi NGO providing rescue, treatment, shelter and ambulance services for stray dogs, cats & other animals.' },
+            { id: 3, name: 'Sanjay Gandhi Animal Care Centre (SGACC)', icon: '🏥', desc: 'One of Delhi\'s biggest animal care centres offering medical care & rehabilitation.' },
+            { id: 4, name: 'Blue Cross SOS (Agrovet Foundation)', icon: '🚑', desc: 'National animal rescue & welfare initiative handling emergency care, vaccinations, stray support and advocacy.' },
+            { id: 5, name: 'Earthlings Trust', icon: '🌿', desc: 'Large rescue & rehabilitation NGO near Delhi-NCR, treating hundreds of stray animals annually.' },
+            { id: 6, name: 'Kalyani Animal Welfare Foundation', icon: '🐕', desc: 'Trusted dog shelter & rehab NGO in Delhi, providing medical treatment and lifelong care.' },
+            { id: 7, name: 'Youth United', icon: '👥', desc: 'Works for animal care and welfare with operational chapters including Delhi.' },
+            { id: 8, name: 'Kannan Animal Welfare', icon: '🛟', desc: 'Active in Delhi-NCR with rescue, medical treatment and adoption support.' },
+            { id: 9, name: 'Angaja Foundation', icon: '💉', desc: 'Delhi-based organisation focused on dog welfare including anti-rabies vaccination and shelter care.' },
+            { id: 10, name: 'Red Paws Rescue', icon: '🐾', desc: 'Works in Delhi with stray dog rescue, sterilisation, adoption and community outreach.' }
+        ];
+
+        // Vet Database
+        const vets = [
+            { name: 'Dr. Arjun Mehta', area: 'Rohini', rating: '4.7', reviews: 247, spec: 'Surgery Specialist', emergency: true },
+            { name: 'Dr. Kavya Sharma', area: 'Saket', rating: '4.6', reviews: 189, spec: 'Dermatology', emergency: false },
+            { name: 'Dr. Rohan Batra', area: 'Pitampura', rating: '4.5', reviews: 156, spec: 'General Veterinary', emergency: true },
+            { name: 'Dr. Simran Kaur', area: 'Dwarka', rating: '4.8', reviews: 312, spec: 'Emergency Care', emergency: true },
+            { name: 'Dr. Nikhil Verma', area: 'Janakpuri', rating: '4.4', reviews: 124, spec: 'Vaccinations', emergency: false },
+            { name: 'Dr. Tanvi Kapoor', area: 'Hauz Khas', rating: '4.9', reviews: 298, spec: 'Feline Specialist', emergency: true },
+            { name: 'Dr. Aman Khurana', area: 'Karol Bagh', rating: '4.3', reviews: 112, spec: 'General Veterinary', emergency: false },
+            { name: 'Dr. Priya Malhotra', area: 'Greater Kailash', rating: '4.6', reviews: 203, spec: 'Internal Medicine', emergency: true }
+        ];
+
+        // Medicine Database
+        const medicines = [
+            { name: 'Rabies Vaccine', store: 'PetCare Pharmacy', area: 'Rohini', price: '₹450', availability: 'In Stock', cheapest: true },
+            { name: 'Rabies Vaccine', store: 'PawMeds', area: 'Pitampura', price: '₹520', availability: 'In Stock', cheapest: false },
+            { name: 'Tick Spray', store: 'HealthyPets', area: 'Dwarka', price: '₹320', availability: 'In Stock', cheapest: true },
+            { name: 'Deworming Tablet', store: 'VetPlus', area: 'Saket', price: '₹150', availability: 'Limited Stock', cheapest: true },
+            { name: 'Antibiotic Ointment', store: 'MediVet', area: 'Rohini', price: '₹280', availability: 'In Stock', cheapest: false },
+            { name: 'Flea Prevention', store: 'PetCare Pharmacy', area: 'Saket', price: '₹650', availability: 'In Stock', cheapest: true }
+        ];
+
+        // Chatbot responses
+        const chatbotResponses = {
+            'vomiting': 'Mild vomiting may be due to diet changes. Ensure proper hydration and avoid sudden food changes. If it persists beyond 24 hours, consult a vet like Dr. Arjun Mehta in Rohini or Dr. Simran Kaur in Dwarka for emergency care.',
+            'fever': 'If your pet\'s temperature exceeds 102.5°F, consult a vet immediately. Suggested emergency clinics: Dr. Simran Kaur (Dwarka) or Dr. Tanvi Kapoor (Hauz Khas). Keep them cool and hydrated.',
+            'loose motion': 'Keep your pet hydrated with small water sips. Use vet-recommended ORS solution. If blood is present or it persists for 2+ days, seek immediate veterinary care.',
+            'best vet': 'Top-rated vets in Delhi: Dr. Tanvi Kapoor (4.9⭐, Hauz Khas), Dr. Simran Kaur (4.8⭐, Dwarka), Dr. Arjun Mehta (4.7⭐, Rohini). Choose based on your location and specialization needs.',
+            'vaccination price': 'Rabies vaccine costs ₹450-520 depending on location. Cheapest found at PetCare Pharmacy in Rohini (₹450). Book your appointment today!',
+            'emergency': 'Available 24/7 emergency clinics: Dr. Simran Kaur (Dwarka), Dr. Arjun Mehta (Rohini), Dr. Tanvi Kapoor (Hauz Khas). All equipped for urgent care.',
+            'tick spray': 'Recommended tick spray available at HealthyPets (Dwarka) for ₹320 - best price in Delhi! Always consult your vet before applying.',
+            'adoption': 'Rescue animals marked as "Adoption Ready" have completed all medical protocols. Visit our NGO section to browse available pets for adoption!'
+        };
+
+        // Initialize Element SDK
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig,
+                onConfigChange: async (newConfig) => {
+                    Object.assign(config, newConfig);
+                    document.getElementById('brandName').textContent = config.brand_name;
+                    document.getElementById('navBrandName').textContent = config.brand_name;
+                    document.getElementById('heroHeadline').textContent = config.hero_headline;
+                    document.getElementById('heroSubheading').textContent = config.hero_subheading;
+                },
+                mapToCapabilities: (cfg) => ({
+                    recolorables: [],
+                    borderables: [],
+                    fontEditable: undefined,
+                    fontSizeable: undefined
+                }),
+                mapToEditPanelValues: (cfg) => new Map([
+                    ['brand_name', cfg.brand_name || defaultConfig.brand_name],
+                    ['hero_headline', cfg.hero_headline || defaultConfig.hero_headline],
+                    ['hero_subheading', cfg.hero_subheading || defaultConfig.hero_subheading],
+                    ['ai_assistant_title', cfg.ai_assistant_title || defaultConfig.ai_assistant_title]
+                ])
+            });
+        }
+
+        // Loading page animation
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loadingPage = document.getElementById('loadingPage');
+                loadingPage.classList.add('hidden');
+            }, 2500);
+        });
+
+        // Generate Random Wallet Address
+        function generateRandomWalletAddress() {
+            const chars = '0123456789abcdef';
+            let address = '0x';
+            for (let i = 0; i < 40; i++) {
+                address += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return address;
+        }
+
+        // Generate Random NGO Hash ID (5 letters)
+        function generateNGOHashID() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let hash = '';
+            for (let i = 0; i < 5; i++) {
+                hash += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return hash;
+        }
+
+        // Show NGO Donation List
+        function showNGODonationList() {
+            if (!currentUser) {
+                showNotification('⚠️ Please login first to make donations');
+                openLoginModal();
+                return;
+            }
+
+            if (userRole !== 'hooman') {
+                showNotification('⚠️ Only HOOMAN users can donate. Please switch to HOOMAN mode.');
+                return;
+            }
+
+            renderNGODonationCards();
+            document.getElementById('ngoDonationListModal').classList.add('active');
+        }
+
+        // Render NGO Donation Cards
+        function renderNGODonationCards() {
+            const grid = document.getElementById('ngoDonationGrid');
+            grid.innerHTML = ngoDonationList.map(ngo => `
+                 <div class="ngo-donation-card" onclick="selectNGOForDonation(${ngo.id})">
+                     <div class="ngo-donation-icon">${ngo.icon}</div>
+                     <div class="ngo-donation-name">${ngo.name}</div>
+                     <div class="ngo-donation-info">${ngo.desc}</div>
+                     <button class="ngo-donate-btn" onclick="event.stopPropagation(); openPaymentModal(${ngo.id})">
+                         💝 Donate Now
+                     </button>
+                 </div>
+             `).join('');
+        }
+
+        // Select NGO for Donation
+        function selectNGOForDonation(ngoId) {
+            const ngo = ngoDonationList.find(n => n.id === ngoId);
+            selectedNGOForDonation = ngo;
+        }
+
+        // Open Payment Modal
+        function openPaymentModal(ngoId) {
+            const ngo = ngoDonationList.find(n => n.id === ngoId);
+            selectedNGOForDonation = ngo;
+            document.getElementById('paymentNGOName').textContent = ngo.name;
+            document.getElementById('ngoDonationListModal').classList.remove('active');
+            document.getElementById('paymentModal').classList.add('active');
+            selectedPaymentMethod = null;
+        }
+
+        // Close Payment Modal
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.remove('active');
+            document.getElementById('ngoDonationListModal').classList.add('active');
+            selectedPaymentMethod = null;
+        }
+
+        // Select Payment Method
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+
+            if (method === 'upi') {
+                document.getElementById('paymentModal').classList.remove('active');
+                document.getElementById('upiQRModal').classList.add('active');
+                document.getElementById('upiNGOName').textContent = selectedNGOForDonation.name;
+                generateQRCode();
+            } else if (method === 'hive') {
+                showInsufficientBalance('HIVE');
+            } else if (method === 'usdt') {
+                showInsufficientBalance('USDT');
+            }
+        }
+
+        // Generate QR Code with random SVG pattern
+        function generateQRCode() {
+            const qrPlaceholder = document.getElementById('qrCodePlaceholder');
+            let svg = '<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg" style="background:white;"><rect width="200" height="200" fill="white"/>';
+
+            // Create random QR-like pattern
+            for (let i = 0; i < 20; i++) {
+                for (let j = 0; j < 20; j++) {
+                    if (Math.random() > 0.5) {
+                        svg += `<rect x="${i * 10}" y="${j * 10}" width="10" height="10" fill="black"/>`;
+                    }
+                }
+            }
+
+            // Add finder patterns (position markers)
+            const positions = [[0, 0], [140, 0], [0, 140]];
+            positions.forEach(([x, y]) => {
+                svg += `<rect x="${x + 5}" y="${y + 5}" width="30" height="30" fill="none" stroke="black" stroke-width="2"/>`;
+                svg += `<rect x="${x + 15}" y="${y + 15}" width="10" height="10" fill="black"/>`;
+            });
+
+            // Add timing patterns
+            for (let i = 0; i < 20; i++) {
+                if (i % 2 === 0) {
+                    svg += `<rect x="${40}" y="${i * 10}" width="10" height="10" fill="black"/>`;
+                    svg += `<rect x="${i * 10}" y="40" width="10" height="10" fill="black"/>`;
+                }
+            }
+
+            svg += '</svg>';
+            qrPlaceholder.innerHTML = svg;
+        }
+
+        // Show Insufficient Balance
+        function showInsufficientBalance(tokenName) {
+            document.getElementById('paymentModal').classList.remove('active');
+            document.getElementById('insufficientBalanceModal').classList.add('active');
+            document.getElementById('insufficientTokenName').textContent = tokenName;
+            document.getElementById('balanceTokenName').textContent = tokenName;
+        }
+
+        // Close Insufficient Balance
+        function closeInsufficientBalance() {
+            document.getElementById('insufficientBalanceModal').classList.remove('active');
+            document.getElementById('paymentModal').classList.add('active');
+            selectedPaymentMethod = null;
+        }
+
+        // Switch to UPI
+        function switchToUPI() {
+            document.getElementById('insufficientBalanceModal').classList.remove('active');
+            document.getElementById('upiQRModal').classList.add('active');
+            generateQRCode();
+        }
+
+        // Close UPI QR
+        function closeUPIQR() {
+            document.getElementById('upiQRModal').classList.remove('active');
+            document.getElementById('paymentModal').classList.add('active');
+            selectedPaymentMethod = null;
+        }
+
+        // Confirm UPI Donation
+        function confirmUPIDonation() {
+            showNotification(`✅ Donation to ${selectedNGOForDonation.name} initiated via UPI! 🎉`);
+            document.getElementById('upiQRModal').classList.remove('active');
+            document.getElementById('ngoDonationListModal').classList.remove('active');
+            closeNGODonationList();
+            selectedNGOForDonation = null;
+        }
+
+        // Close NGO Donation List
+        function closeNGODonationList() {
+            document.getElementById('ngoDonationListModal').classList.remove('active');
+        }
+
+        // Open NGO Section with Role Selection
+        function openNGOSection() {
+            if (!currentUser) {
+                showNotification('⚠️ Please login first to access NGO features');
+                openLoginModal();
+                return;
+            }
+
+            if (!userRole) {
+                document.getElementById('roleModal').classList.add('active');
+            } else {
+                showSection('ngo');
+            }
+        }
+
+        // Select Role
+        function selectRole(role) {
+            userRole = role;
+            document.getElementById('roleModal').classList.remove('active');
+
+            if (role === 'ngo') {
+                document.getElementById('ngoVerificationModal').classList.add('active');
+            } else {
+                renderHOOMANCards();
+                showSection('ngo');
+            }
+        }
+
+        // Switch Role
+        function switchRole() {
+            userRole = null;
+            currentNGOHash = null;
+            ngoData = null;
+            document.getElementById('ngoVerificationModal').classList.remove('active');
+            document.getElementById('roleModal').classList.add('active');
+        }
+
+        // Switch to HOOMAN Mode (from NGO verified)
+        function switchToHOOMANMode() {
+            userRole = 'hooman';
+            currentNGOHash = null;
+            ngoData = null;
+            document.getElementById('ngoVerifiedModal').classList.remove('active');
+            document.getElementById('ngoVerifiedModal').style.display = 'none';
+            renderHOOMANCards();
+            showSection('ngo');
+            showNotification('✅ Switched to HOOMAN mode. You can now browse adoptions and support rescues!');
+        }
+
+        // Close NGO Verification
+        function closeNGOVerification() {
+            document.getElementById('ngoVerificationModal').classList.remove('active');
+            userRole = null;
+        }
+
+        // Submit NGO Form
+        function submitNGOForm(event) {
+            event.preventDefault();
+
+            const personName = document.getElementById('personName').value;
+            const ngoName = document.getElementById('ngoName').value;
+            const ngoLicense = document.getElementById('ngoLicense').value;
+            const registrationDate = document.getElementById('registrationDate').value;
+            const ngoLocation = document.getElementById('ngoLocation').value;
+
+            ngoData = {
+                personName,
+                ngoName,
+                ngoLicense,
+                registrationDate,
+                ngoLocation
+            };
+
+            document.getElementById('ngoVerificationModal').classList.remove('active');
+            document.getElementById('ngoVerifyingModal').style.display = 'block';
+
+            // Step 1: License validation (after 1s)
+            setTimeout(() => {
+                document.getElementById('verifyStep1').textContent = '✓';
+                document.getElementById('verifyStep1').style.background = 'linear-gradient(135deg, #0277BD, #00BCD4)';
+                document.getElementById('verifyStep1').style.animation = 'none';
+            }, 1000);
+
+            // Step 2: Date checking (after 3s)
+            setTimeout(() => {
+                document.getElementById('verifyStep2').textContent = '✓';
+                document.getElementById('verifyStep2').style.background = 'linear-gradient(135deg, #0277BD, #00BCD4)';
+                document.getElementById('verifyStep2').style.color = 'white';
+                document.querySelectorAll('#ngoVerifyingModal span')[4].style.color = '#0D47A1';
+            }, 3000);
+
+            // Step 3: Hash generation (after 5s)
+            setTimeout(() => {
+                document.getElementById('verifyStep3').textContent = '✓';
+                document.getElementById('verifyStep3').style.background = 'linear-gradient(135deg, #0277BD, #00BCD4)';
+                document.getElementById('verifyStep3').style.color = 'white';
+                document.querySelectorAll('#ngoVerifyingModal span')[6].style.color = '#0D47A1';
+            }, 5000);
+
+            // Complete: Show verified modal (after 6.5s)
+            setTimeout(() => {
+                currentNGOHash = generateNGOHashID();
+                document.getElementById('ngoVerifyingModal').style.display = 'none';
+                document.getElementById('ngoVerifiedModal').style.display = 'block';
+                document.getElementById('ngoHashDisplay').textContent = currentNGOHash;
+                document.getElementById('ngoVerifiedModal').classList.add('active');
+            }, 6500);
+        }
+
+        // Copy NGO Hash
+        function copyNGOHash() {
+            if (currentNGOHash) {
+                navigator.clipboard.writeText(currentNGOHash).then(() => {
+                    showNotification('✅ NGO Hash ID copied to clipboard!');
+                });
+            }
+        }
+
+        // Close NGO Verified Modal
+        function closeNGOVerifiedModal() {
+            document.getElementById('ngoVerifiedModal').classList.remove('active');
+            document.getElementById('ngoVerifiedModal').style.display = 'none';
+            renderNGOCards();
+            showSection('ngo');
+        }
+
+        // Render NGO Cards
+        function renderNGOCards() {
+            const container = document.getElementById('ngoCardsContainer');
+            container.innerHTML = `
+                 <div style="width: 100%; text-align: center; margin-bottom: 40px;">
+                     <button onclick="switchRole()" style="background: white; color: #0277BD; border: 2px solid #0277BD; padding: 12px 25px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#E3F2FD'" onmouseout="this.style.background='white'">
+                         ↩️ Switch Role (NGO / HOOMAN)
+                     </button>
+                 </div>
+                 <div class="ngo-card">
+                     <div class="ngo-icon">📋</div>
+                     <div class="ngo-title">Register Rescued Pet</div>
+                     <p class="ngo-desc">Create a profile for rescued street dogs and cats. Track their medical journey on VetraChain.</p>
+                     <button class="ngo-button" onclick="showNotification('Registration form would appear here')">Start Registration</button>
+                 </div>
+                 <div class="ngo-card">
+                     <div class="ngo-icon">🏥</div>
+                     <div class="ngo-title">Track Treatment Progress</div>
+                     <p class="ngo-desc">Monitor each animal's recovery, vaccination, and health status throughout rehabilitation.</p>
+                     <button class="ngo-button" onclick="showNotification('Treatment tracker would appear here')">View Tracker</button>
+                 </div>
+                 <div class="ngo-card">
+                     <div class="ngo-icon">🎖️</div>
+                     <div class="ngo-title">Badge Management</div>
+                     <p class="ngo-desc">Create and assign adoption-ready badges to animals that have completed all medical protocols.</p>
+                     <button class="ngo-button" onclick="showNotification('Badge management tool would appear here')">Manage Badges</button>
+                 </div>
+             `;
+        }
+
+        // Render HOOMAN Cards
+        function renderHOOMANCards() {
+            const container = document.getElementById('ngoCardsContainer');
+            container.innerHTML = `
+                 <div style="width: 100%; text-align: center; margin-bottom: 40px;">
+                     <button onclick="switchRole()" style="background: white; color: #0277BD; border: 2px solid #0277BD; padding: 12px 25px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#E3F2FD'" onmouseout="this.style.background='white'">
+                         ↩️ Switch Role (NGO / HOOMAN)
+                     </button>
+                 </div>
+                 <div class="ngo-card">
+                     <div class="ngo-icon">🏠</div>
+                     <div class="ngo-title">Adoption Ready Badge</div>
+                     <p class="ngo-desc">Browse animals marked as "Adoption Ready" that have completed all medical protocols and vaccinations.</p>
+                     <button class="ngo-button" onclick="showNotification('Adoption listings would appear here')">Browse Adoptions</button>
+                 </div>
+                 <div class="ngo-card">
+                     <div class="ngo-icon">💰</div>
+                     <div class="ngo-title">Transparent Donations</div>
+                     <p class="ngo-desc">Contribute directly to medical care of rescued animals. See exactly where your donation goes.</p>
+                     <button class="ngo-button" onclick="showNGODonationList()">Donate Now</button>
+                 </div>
+             `;
+        }
+
+        // Login with Hive Keychain with Animation
+        function loginWithHiveKeychain() {
+            showHiveKeyChainConnectingAnimation();
+        }
+
+        // Hive Keychain Connection Animation
+        function showHiveKeyChainConnectingAnimation() {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                 position: fixed;
+                 top: 0;
+                 left: 0;
+                 right: 0;
+                 bottom: 0;
+                 background: rgba(0, 0, 0, 0.7);
+                 display: flex;
+                 justify-content: center;
+                 align-items: center;
+                 z-index: 3000;
+             `;
+
+            modal.innerHTML = `
+                 <div style="background: white; border-radius: 20px; padding: 50px 40px; max-width: 450px; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2); text-align: center;">
+                     <!-- Step Indicator -->
+                     <div style="display: flex; justify-content: space-around; margin-bottom: 50px;">
+                         <div style="display: flex; flex-direction: column; align-items: center;">
+                             <div id="step1Icon" style="width: 50px; height: 50px; background: linear-gradient(135deg, #0277BD, #00BCD4); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; margin-bottom: 10px; animation: pulse 2s ease-in-out infinite;">🔗</div>
+                             <div style="font-size: 12px; color: #999; font-weight: 600;">Connecting</div>
+                         </div>
+                         <div style="display: flex; flex-direction: column; align-items: center;">
+                             <div id="step2Icon" style="width: 50px; height: 50px; background: #B3E5FC; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #999; font-size: 24px; margin-bottom: 10px;">📥</div>
+                             <div style="font-size: 12px; color: #999; font-weight: 600;">Fetching</div>
+                         </div>
+                         <div style="display: flex; flex-direction: column; align-items: center;">
+                             <div id="step3Icon" style="width: 50px; height: 50px; background: #B3E5FC; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #999; font-size: 24px; margin-bottom: 10px;">✓</div>
+                             <div style="font-size: 12px; color: #999; font-weight: 600;">Success</div>
+                         </div>
+                     </div>
+         
+                     <!-- Status Message -->
+                     <h2 id="statusTitle" style="font-size: 24px; font-weight: 800; color: #0277BD; margin-bottom: 15px;">🔐 Connecting to Hive Keychain</h2>
+                     <p id="statusMsg" style="color: #666; font-size: 14px; margin-bottom: 30px; min-height: 40px;">Establishing secure connection with Hive Keychain...</p>
+         
+                     <!-- Loading Animation -->
+                     <div id="loadingBar" style="background: #B3E5FC; height: 6px; border-radius: 10px; overflow: hidden; margin-bottom: 30px;">
+                         <div style="height: 100%; background: linear-gradient(90deg, #0277BD, #00BCD4); width: 0%; animation: loading-progress 8s ease-out forwards; border-radius: 10px;"></div>
+                     </div>
+         
+                     <!-- Progress Details -->
+                     <div id="progressDetails" style="text-align: left; background: #E3F2FD; padding: 20px; border-radius: 12px; margin-bottom: 30px; font-size: 13px; color: #666;">
+                         <div id="detail1" style="display: flex; align-items: center; margin-bottom: 12px;">
+                             <span style="width: 20px; height: 20px; background: linear-gradient(135deg, #0277BD, #00BCD4); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; margin-right: 10px; font-size: 12px;">✓</span>
+                             <span>Initializing Hive Keychain...</span>
+                         </div>
+                         <div id="detail2" style="display: flex; align-items: center; margin-bottom: 12px; opacity: 0.5;">
+                             <span style="width: 20px; height: 20px; background: #B3E5FC; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #999; margin-right: 10px; font-size: 12px;">⏳</span>
+                             <span>Fetching user details...</span>
+                         </div>
+                         <div id="detail3" style="display: flex; align-items: center; opacity: 0.5;">
+                             <span style="width: 20px; height: 20px; background: #B3E5FC; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #999; margin-right: 10px; font-size: 12px;">⏳</span>
+                             <span>Generating wallet address...</span>
+                         </div>
+                     </div>
+                 </div>
+             `;
+
+            document.body.appendChild(modal);
+            window.hiveConnectingModal = modal;
+
+            // Step 1: Connecting (0-2s)
+            setTimeout(() => {
+                document.getElementById('detail2').style.opacity = '1';
+                document.getElementById('statusMsg').textContent = 'Fetching your Hive Keychain details...';
+            }, 2000);
+
+            // Step 2: Fetching (2-5s)
+            setTimeout(() => {
+                document.getElementById('step2Icon').style.background = 'linear-gradient(135deg, #0277BD, #00BCD4)';
+                document.getElementById('step2Icon').style.color = 'white';
+                document.getElementById('detail2').querySelector('span:first-child').textContent = '✓';
+                document.getElementById('detail3').style.opacity = '1';
+                document.getElementById('statusMsg').textContent = 'Generating secure wallet address...';
+            }, 5000);
+
+            // Step 3: Success (5-8s)
+            setTimeout(() => {
+                document.getElementById('step3Icon').style.background = 'linear-gradient(135deg, #0277BD, #00BCD4)';
+                document.getElementById('step3Icon').style.color = 'white';
+                document.getElementById('detail3').querySelector('span:first-child').textContent = '✓';
+                document.getElementById('statusTitle').textContent = '✅ Login Successful!';
+                document.getElementById('statusMsg').textContent = 'Your Hive Keychain is connected to VetraChain';
+
+                const walletAddress = generateRandomWalletAddress();
+                currentUser = 'User_' + Math.random().toString(36).substr(2, 9).toUpperCase();
+                currentWalletAddress = walletAddress;
+
+                setTimeout(() => {
+                    if (window.hiveConnectingModal) {
+                        window.hiveConnectingModal.remove();
+                    }
+                    showLoginSuccessModal(currentUser, walletAddress);
+                }, 1500);
+            }, 8000);
+        }
+
+        // Show Login Success Modal
+        function showLoginSuccessModal(username, walletAddress) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                 position: fixed;
+                 top: 0;
+                 left: 0;
+                 right: 0;
+                 bottom: 0;
+                 background: rgba(0, 0, 0, 0.7);
+                 display: flex;
+                 justify-content: center;
+                 align-items: center;
+                 z-index: 3000;
+             `;
+
+            modal.innerHTML = `
+                 <div style="background: white; border-radius: 20px; padding: 40px; max-width: 500px; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2); animation: slideIn 0.3s ease; text-align: center;">
+                     <div style="font-size: 60px; margin-bottom: 20px;">✅</div>
+                     <h2 style="font-size: 28px; font-weight: 800; color: #0277BD; margin-bottom: 15px;">Login Successful!</h2>
+                     <p style="color: #666; font-size: 16px; margin-bottom: 30px;">Welcome to VetraChain Blockchain Network</p>
+                     
+                     <div style="background: #E3F2FD; border: 2px solid #0277BD; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                         <div style="font-size: 12px; color: #999; margin-bottom: 8px; text-transform: uppercase; font-weight: 600;">Username</div>
+                         <div style="font-size: 16px; font-weight: 700; color: #0277BD; margin-bottom: 20px; word-break: break-all;">👤 ${username}</div>
+                         
+                         <div style="font-size: 12px; color: #999; margin-bottom: 8px; text-transform: uppercase; font-weight: 600;">Wallet Address</div>
+                         <div style="font-size: 14px; font-weight: 700; color: #0D47A1; background: white; padding: 12px; border-radius: 8px; margin-bottom: 10px; word-break: break-all; font-family: monospace;">${walletAddress}</div>
+                         <button onclick="copyWalletAddress('${walletAddress}')" style="width: 100%; background: linear-gradient(135deg, #0277BD, #00BCD4); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">📋 Copy Wallet Address</button>
+                     </div>
+                     
+                     <button onclick="closeLoginSuccessModal()" style="width: 100%; background: linear-gradient(135deg, #0277BD, #00BCD4); color: white; padding: 15px; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 16px; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                         Continue to VetraChain
+                     </button>
+                 </div>
+             `;
+
+            document.body.appendChild(modal);
+            window.loginSuccessModal = modal;
+        }
+
+        // Copy Wallet Address
+        function copyWalletAddress(address) {
+            navigator.clipboard.writeText(address).then(() => {
+                showNotification('✅ Wallet address copied to clipboard!');
+            });
+        }
+
+        // Close Login Success Modal
+        function closeLoginSuccessModal() {
+            if (window.loginSuccessModal) {
+                window.loginSuccessModal.remove();
+            }
+            updateUIAfterLogin();
+            closeLoginModal();
+            showNotification(`✅ Welcome ${currentUser}! Your wallet is connected to VetraChain.`);
+        }
+
+        // Section Navigation
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(section => section.classList.remove('active'));
+
+            const selectedSection = document.getElementById(sectionId + '-section');
+            if (selectedSection) {
+                selectedSection.classList.add('active');
+                document.querySelector('.scrollable-content').scrollTop = 0;
+            }
+        }
+
+        // Pet Type Selection
+        function selectPetType(type) {
+            selectedPetType = type;
+            document.getElementById('petTypeDog').classList.toggle('pet-type-selected', type === 'dog');
+            document.getElementById('petTypeCat').classList.toggle('pet-type-selected', type === 'cat');
+        }
+
+        // Validate form before generating passport
+        function validatePassportForm() {
+            const breed = document.getElementById('petBreed').value.trim();
+            const name = document.getElementById('petName').value.trim();
+            const age = document.getElementById('petAge').value.trim();
+            const checkup = document.getElementById('petLastCheckup').value.trim();
+
+            if (!breed || !name || !age || !checkup) {
+                showNotification('⚠️ Please fill in all required fields!');
+                return false;
+            }
+
+            if (isNaN(age) || age < 0 || age > 30) {
+                showNotification('⚠️ Please enter a valid age!');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Generate Passport with Animation
+        function generatePassport() {
+            if (!validatePassportForm()) return;
+
+            // Hide form and show minting animation
+            document.getElementById('passportFormContainer').style.display = 'none';
+            document.getElementById('mintingContainer').style.display = 'block';
+
+            // Step 1: Immediate
+            setTimeout(() => {
+                document.getElementById('step1').textContent = '✓';
+                document.getElementById('step1').style.background = 'linear-gradient(135deg, #0277BD, #00BCD4)';
+            }, 300);
+
+            // Step 2: After 1 second
+            setTimeout(() => {
+                document.getElementById('step2').textContent = '✓';
+                document.getElementById('step2').style.background = 'linear-gradient(135deg, #0277BD, #00BCD4)';
+                document.getElementById('step2').style.color = 'white';
+                document.querySelectorAll('#mintingSteps div')[1].querySelector('span:last-child').style.color = '#0D47A1';
+            }, 1200);
+
+            // Step 3: After 2 seconds
+            setTimeout(() => {
+                document.getElementById('step3').textContent = '✓';
+                document.getElementById('step3').style.background = 'linear-gradient(135deg, #0277BD, #00BCD4)';
+                document.getElementById('step3').style.color = 'white';
+                document.querySelectorAll('#mintingSteps div')[2].querySelector('span:last-child').style.color = '#0D47A1';
+            }, 2100);
+
+            // Complete: Show passport after 3 seconds
+            setTimeout(() => {
+                displayPassport();
+            }, 3200);
+        }
+
+        // Display Generated Passport
+        function displayPassport() {
+            document.getElementById('mintingContainer').style.display = 'none';
+            document.getElementById('passportCardContainer').style.display = 'block';
+
+            const petType = selectedPetType === 'dog' ? 'Dog' : 'Cat';
+            const petIcon = selectedPetType === 'dog' ? '🐕' : '🐱';
+            const breed = document.getElementById('petBreed').value;
+            const name = document.getElementById('petName').value;
+            const age = document.getElementById('petAge').value;
+            const allergies = document.getElementById('petAllergies').value || 'None';
+            const checkup = document.getElementById('petLastCheckup').value;
+
+            document.getElementById('passportTitle').textContent = `${petIcon} ${name}'s Health Passport`;
+            document.getElementById('passportType').textContent = petType;
+            document.getElementById('passportName').textContent = name;
+            document.getElementById('passportBreed').textContent = breed;
+            document.getElementById('passportAge').textContent = age + ' Years';
+            document.getElementById('passportAllergies').textContent = allergies;
+            document.getElementById('passportCheckup').textContent = checkup;
+
+            showNotification(`✅ ${name}'s passport has been minted! 🎉`);
+        }
+
+        // Reset form
+        function resetPassportForm() {
+            document.getElementById('petBreed').value = '';
+            document.getElementById('petName').value = '';
+            document.getElementById('petAge').value = '';
+            document.getElementById('petAllergies').value = '';
+            document.getElementById('petLastCheckup').value = '';
+            selectedPetType = 'dog';
+
+            document.getElementById('passportFormContainer').style.display = 'block';
+            document.getElementById('passportCardContainer').style.display = 'none';
+            document.getElementById('petTypeDog').classList.add('pet-type-selected');
+            document.getElementById('petTypeCat').classList.remove('pet-type-selected');
+        }
+
+        // Location Modal Functions
+        function openLocationModal() {
+            document.getElementById('locationModal').classList.add('active');
+        }
+
+        function closeLocationModal() {
+            document.getElementById('locationModal').classList.remove('active');
+        }
+
+        function selectLocation(location) {
+            selectedLocation = location;
+            closeLocationModal();
+            renderVetsForLocation(location);
+            showSection('vets');
+        }
+
+        function renderVetsForLocation(location) {
+            const locationVets = vets.filter(vet => vet.area === location);
+            const sortedVets = locationVets.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
+
+            const vetGrid = document.getElementById('vetGrid');
+            const vetsTitle = document.getElementById('vetsTitle');
+            vetsTitle.textContent = `🏥 Top Rated Vets in ${location}`;
+
+            vetGrid.innerHTML = sortedVets.map(vet => `
+                 <div class="vet-card">
+                     <div class="vet-header">
+                         <div class="vet-name">${vet.name}</div>
+                         <div class="vet-rating">⭐ ${vet.rating}</div>
+                     </div>
+                     <div class="vet-area">📍 ${vet.area} 📊 ${vet.reviews} reviews</div>
+                     <div class="vet-spec">${vet.spec}</div>
+                     ${vet.emergency ? '<div class="vet-badge">🚨 Emergency Available</div>' : ''}
+                     <button class="vet-button" onclick="bookVet('${vet.name}', '${vet.area}')">Book Appointment</button>
+                 </div>
+             `).join('');
+        }
+
+        // Login Modal
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+        }
+
+        // Update UI After Login
+        function updateUIAfterLogin() {
+            document.getElementById('loginBtn').style.display = 'none';
+            document.getElementById('userInfo').style.display = 'flex';
+            document.getElementById('username').textContent = currentUser;
+
+            // Show passport form and hide login container
+            document.getElementById('passportLoginContainer').style.display = 'none';
+            document.getElementById('passportFormContainer').style.display = 'block';
+        }
+
+        // Logout User
+        function logoutUser() {
+            currentUser = null;
+            currentWalletAddress = null;
+            userRole = null;
+            ngoData = null;
+            currentNGOHash = null;
+            selectedNGOForDonation = null;
+            selectedPaymentMethod = null;
+            document.getElementById('loginBtn').style.display = 'block';
+            document.getElementById('userInfo').style.display = 'none';
+            showNotification('✅ You have been logged out.');
+
+            // Reset passport section
+            document.getElementById('passportLoginContainer').style.display = 'block';
+            document.getElementById('passportFormContainer').style.display = 'none';
+            document.getElementById('passportCardContainer').style.display = 'none';
+            document.getElementById('mintingContainer').style.display = 'none';
+        }
+
+        function bookVet(name, area) {
+            if (!currentUser) {
+                openLoginModal();
+                return;
+            }
+            showNotification(`✅ Booking Dr. ${name} in ${area}...`);
+        }
+
+        // Render medicine table
+        function renderMedicines() {
+            const medicineTable = document.getElementById('medicineTable');
+            medicineTable.innerHTML = medicines.map(med => `
+                 <tr>
+                     <td>${med.name}</td>
+                     <td>${med.store}</td>
+                     <td>${med.area}</td>
+                     <td style="font-weight: 600; color: #0277BD;">${med.price}</td>
+                     <td>${med.availability}</td>
+                     <td>${med.cheapest ? '<span class="price-badge">💰 Cheapest</span>' : ''}</td>
+                 </tr>
+             `).join('');
+        }
+
+        // Chatbot functions
+        function openChatbot() {
+            const chatbot = document.getElementById('chatbot');
+            const openBtn = document.getElementById('openChatBtn');
+            chatbot.style.display = 'flex';
+            chatbot.classList.remove('collapsed');
+            openBtn.style.display = 'none';
+            document.getElementById('toggleBtn').textContent = '−';
+            document.getElementById('chatInput').focus();
+        }
+
+        function toggleChatbot() {
+            const chatbot = document.getElementById('chatbot');
+            const toggleBtn = document.getElementById('toggleBtn');
+
+            if (chatbot.classList.contains('collapsed')) {
+                chatbot.classList.remove('collapsed');
+                toggleBtn.textContent = '−';
+            } else {
+                chatbot.classList.add('collapsed');
+                toggleBtn.textContent = '+';
+            }
+        }
+
+        function closeChatbot() {
+            const chatbot = document.getElementById('chatbot');
+            const openBtn = document.getElementById('openChatBtn');
+            chatbot.style.display = 'none';
+            openBtn.style.display = 'flex';
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const chatMessages = document.getElementById('chatMessages');
+
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-message message-user';
+            userMsg.textContent = message;
+            chatMessages.appendChild(userMsg);
+
+            // Generate bot response
+            let botResponse = 'I\'m here to help with pet healthcare, vet recommendations, and medicine prices. Ask me anything!';
+
+            const msgLower = message.toLowerCase();
+            for (const [key, response] of Object.entries(chatbotResponses)) {
+                if (msgLower.includes(key)) {
+                    botResponse = response;
+                    break;
+                }
+            }
+
+            // Add bot response after slight delay
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'chat-message message-bot';
+                botMsg.textContent = botResponse;
+                chatMessages.appendChild(botMsg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 600);
+
+            input.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function scrollToChat() {
+            const chatbot = document.getElementById('chatbot');
+            const openBtn = document.getElementById('openChatBtn');
+            chatbot.style.display = 'flex';
+            chatbot.classList.remove('collapsed');
+            openBtn.style.display = 'none';
+            document.getElementById('toggleBtn').textContent = '−';
+            setTimeout(() => {
+                document.getElementById('chatInput').focus();
+            }, 300);
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                 position: fixed;
+                 bottom: 400px;
+                 left: 50%;
+                 transform: translateX(-50%);
+                 background: linear-gradient(135deg, #0277BD, #00BCD4);
+                 color: white;
+                 padding: 15px 25px;
+                 border-radius: 10px;
+                 font-weight: 600;
+                 z-index: 2001;
+                 animation: slideUp 0.3s ease;
+                 box-shadow: 0 10px 30px rgba(2, 119, 189, 0.3);
+             `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideDown 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Allow Enter key to send message
+        document.getElementById('chatInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // Initialize page
+        renderMedicines();
+    </script>
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'9ceea441b3c3a6bd',t:'MTc3MTI2MTY1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+</body>
+
+</html>

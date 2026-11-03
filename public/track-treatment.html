@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Track Treatment - VetraChain</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+
+<body class="bg-gray-50">
+
+<!-- Navbar -->
+<div class="bg-teal-500 text-white p-4 flex justify-between">
+  <h1 class="text-xl font-bold">🏥 Treatment Tracker</h1>
+  <button onclick="goBack()" class="bg-white text-teal-500 px-3 py-1 rounded">
+    Back
+  </button>
+</div>
+
+<!-- Container -->
+<div class="p-6">
+  <h2 class="text-2xl font-bold mb-4">Rescued Pets</h2>
+
+  <div id="petList" class="grid md:grid-cols-3 gap-4"></div>
+</div>
+
+<script>
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDyt...",
+  authDomain: "vetrachain-7721f.firebaseapp.com",
+  projectId: "vetrachain-7721f"
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
+
+async function loadPets() {
+
+  const container = document.getElementById("petList");
+  container.innerHTML = "Loading...";
+
+  const ngoID = localStorage.getItem("ngoID");
+
+  const snapshot = await db.collection("rescued_pets")
+    .where("ngoID", "==", ngoID)
+    .get();
+
+  if (snapshot.empty) {
+    container.innerHTML = "No pets found";
+    return;
+  }
+
+  container.innerHTML = "";
+
+  snapshot.forEach(doc => {
+    const pet = doc.data();
+
+    container.innerHTML += `
+      <div class="bg-white p-4 rounded shadow">
+
+        <h3 class="text-lg font-bold">${pet.name}</h3>
+        <p class="text-sm text-gray-600">${pet.type} • ${pet.breed || "Unknown"}</p>
+
+        <p class="mt-2"><b>Condition:</b> ${pet.condition}</p>
+
+        <textarea id="notes-${doc.id}"
+          class="w-full mt-2 p-2 border rounded"
+          placeholder="Update treatment...">${pet.notes || ""}</textarea>
+
+        <select id="status-${doc.id}"
+          class="w-full mt-2 p-2 border rounded">
+
+          <option ${pet.condition==="Critical"?"selected":""}>Critical</option>
+          <option ${pet.condition==="Injured"?"selected":""}>Injured</option>
+          <option ${pet.condition==="Recovering"?"selected":""}>Recovering</option>
+          <option ${pet.condition==="Healthy"?"selected":""}>Healthy</option>
+
+        </select>
+
+        <button onclick="updatePet('${doc.id}')"
+          class="mt-3 w-full bg-teal-500 text-white py-1 rounded">
+          Update Treatment
+        </button>
+
+      </div>
+    `;
+  });
+}
+
+async function updatePet(id) {
+
+  const notes = document.getElementById(`notes-${id}`).value;
+  const status = document.getElementById(`status-${id}`).value;
+
+  try {
+    await db.collection("rescued_pets").doc(id).update({
+      notes: notes,
+      condition: status,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    alert("✅ Updated successfully");
+    loadPets();
+
+  } catch (err) {
+    console.error(err);
+    alert("Error updating");
+  }
+}
+
+function goBack() {
+  window.location.href = "ngo.html";
+}
+
+loadPets();
+
+</script>
+
+</body>
+</html>
