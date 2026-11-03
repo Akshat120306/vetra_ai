@@ -1,0 +1,69 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /* ===============================
+       👤 USERS (OWN PROFILE)
+       Signup writes users/{uid} = { email, role, createdAt }.
+       A signed-in user may create/update only their own document.
+       =============================== */
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null
+        && request.auth.uid == userId;
+      allow delete: if false;
+    }
+
+    /* ===============================
+       🏥 VETS (PUBLIC)
+       =============================== */
+    match /vets/{vetId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    /* ===============================
+       ⭐ VET REVIEWS
+       =============================== */
+    match /vet_reviews/{reviewId} {
+      allow read: if true;
+
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid;
+
+      allow update, delete: if false;
+    }
+
+    /* ===============================
+       🐶 PET PASSPORTS (OWNER ONLY)
+       =============================== */
+    match /pet_passports/{passportId} {
+
+      allow read: if request.auth != null
+        && request.auth.uid == resource.data.ownerId;
+
+      allow create: if request.auth != null
+        && request.auth.uid == request.resource.data.ownerId;
+
+      allow delete: if request.auth != null
+        && request.auth.uid == resource.data.ownerId;
+
+      allow update: if false;
+    }
+
+    /* ===============================
+       🐾 RESCUED PETS (NGO SYSTEM)
+       =============================== */
+    match /rescued_pets/{petId} {
+
+      // anyone can view (for now)
+      allow read: if true;
+
+      // allow saving (we improve later)
+      allow create: if true;
+
+      allow update, delete: if true;
+    }
+
+  }
+}
