@@ -220,13 +220,48 @@
       flex-wrap: wrap; } .footer-links a { color: white; text-decoration: none;
       transition: opacity 0.3s ease; cursor: pointer; } .footer-links a:hover
       { opacity: 0.7; } .footer-bottom { border-top: 1px solid rgba(255, 255,
-      255, 0.2); padding-top: 30px; opacity: 0.7; } @media (max-width: 768px)
-      { .navbar-links { gap: 1rem; font-size: 12px; } .hero-headline { font-size:
-      36px; } .hero-subheading { font-size: 16px; } .hero-buttons { flex-direction:
-      column; } .btn-primary, .btn-secondary { width: 100%; } .chatbot-container
-      { width: 95vw; height: 500px; bottom: 10px; right: 10px; } .section-title
-      { font-size: 28px; } .vet-grid { grid-template-columns: 1fr; } .location-grid
-      { grid-template-columns: 1fr; } } .scrollable-content { width: 100%; height:
+      255, 0.2); padding-top: 30px; opacity: 0.7; }
+      /* Hamburger toggle (hidden on desktop) */
+      .nav-toggle { display: none; background: none; border: none; font-size: 28px; line-height: 1; color: #1CA7A6; cursor: pointer; padding: 4px 8px; }
+      @media (max-width: 768px) {
+        .nav-toggle { display: block; }
+        .navbar { padding: 0.75rem 1rem; }
+        .navbar-content { flex-wrap: wrap; }
+        .navbar-brand { font-size: 20px; }
+        .navbar-links {
+          display: none; flex-direction: column; align-items: stretch;
+          width: 100%; gap: 0.25rem; margin-top: 0.75rem;
+          max-height: calc(100vh - 80px); overflow-y: auto;
+        }
+        .navbar-links.open { display: flex; }
+        .navbar-links li { width: 100%; }
+        .navbar-links a { display: block; width: 100%; padding: 12px 6px; font-size: 15px; border-bottom: 1px solid rgba(28,167,166,0.08); }
+        .navbar-links .user-info { width: 100%; justify-content: space-between; padding: 8px 0; }
+        .navbar-links .navbar-btn { width: 100%; }
+        .hero { padding: 100px 1.25rem 60px; min-height: auto; }
+        .hero-headline { font-size: 32px; }
+        .hero-subheading { font-size: 16px; }
+        .hero-buttons { flex-direction: column; width: 100%; }
+        .btn-primary, .btn-secondary { width: 100%; }
+        .section { padding: 50px 1.25rem; }
+        .section-title { font-size: 28px; margin-bottom: 30px; }
+        .footer { padding: 40px 1.25rem; }
+        .footer-links { flex-wrap: wrap; gap: 16px; }
+        .chatbot-container { width: 95vw; height: 70vh; bottom: 10px; right: 10px; }
+        .chatbot-body { height: auto; flex: 1; }
+        .vet-grid { grid-template-columns: 1fr; }
+        .location-grid { grid-template-columns: 1fr; }
+        .login-box, .location-box { padding: 28px 20px; width: 90vw; max-width: 90vw; max-height: 90vh; overflow-y: auto; }
+        .passport-card { padding: 28px 22px; }
+        .passport-row { font-size: 14px; }
+        .qr-code-placeholder { width: 200px; height: 200px; font-size: 64px; }
+      }
+      @media (max-width: 420px) {
+        .hero-headline { font-size: 26px; }
+        .section-title { font-size: 24px; }
+        .passport-row { flex-direction: column; gap: 2px; margin-bottom: 14px; }
+      }
+      .scrollable-content { width: 100%; height:
       100%; overflow-y: auto; } @keyframes pulse { 0%, 100% { transform: scale(1);
       } 50% { transform: scale(1.1); } } @keyframes loading-progress { 0% { width:
       0%; } 100% { width: 100%; } } @keyframes slideDown { from { opacity: 1;
@@ -397,7 +432,10 @@
               VetraChain
             </span>
           </div>
-          <ul class="navbar-links">
+          <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" onclick="toggleNav()">
+            ☰
+          </button>
+          <ul class="navbar-links" id="navbarLinks">
             <li>
               <a onclick="showSection('home')">
                 Home
@@ -443,7 +481,26 @@
           </ul>
         </div>
       </nav>
-        
+      <script>
+        function toggleNav() {
+          var links = document.getElementById('navbarLinks');
+          var btn = document.getElementById('navToggle');
+          var open = links.classList.toggle('open');
+          if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+        function closeNav() {
+          var links = document.getElementById('navbarLinks');
+          var btn = document.getElementById('navToggle');
+          if (links) links.classList.remove('open');
+          if (btn) btn.setAttribute('aria-expanded', 'false');
+        }
+        // Close the mobile menu after tapping any link
+        document.addEventListener('DOMContentLoaded', function () {
+          var links = document.querySelectorAll('#navbarLinks a, #navbarLinks .navbar-btn');
+          links.forEach(function (el) { el.addEventListener('click', closeNav); });
+        });
+      </script>
+
       <!-- Home Section -->
       <div class="page-section active" id="home-section">
         <section class="hero" id="home">
